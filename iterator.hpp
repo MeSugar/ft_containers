@@ -8,17 +8,16 @@ namespace ft
 	// iterator category tag
 	struct random_access_iterator_tag {};
 
-	// base iterator
+	// base iterator template
 	template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
 	class iterator
 	{
 		protected:
-		typedef T			value_type;
-		typedef Distance	difference_type;
-		typedef Pointer		pointer;
-		typedef Reference	reference;
-		typedef Category	iterator_category;
-		//  iterator() { std::cout << "base_iterator created" << std::endl; }
+			typedef T			value_type;
+			typedef Distance	difference_type;
+			typedef Pointer		pointer;
+			typedef Reference	reference;
+			typedef Category	iterator_category;
 	};
 
 	// iterator traits
@@ -26,41 +25,33 @@ namespace ft
 	class iterator_traits
 	{
 		public:
-		typedef typename Iterator::difference_type		difference_type;
-		typedef typename Iterator::value_type			value_type;
-		typedef typename Iterator::pointer				pointer;
-		typedef typename Iterator::reference			reference;
-		typedef typename Iterator::iterator_category	iterator_category;
-		//  iterator_traits()
-		//  {
-		//  	std::cout << "iterator_traits created" << std::endl;
-		//  	std::cout << sizeof(value_type) << std::endl;
-		//  }
-
+			typedef typename Iterator::difference_type		difference_type;
+			typedef typename Iterator::value_type			value_type;
+			typedef typename Iterator::pointer				pointer;
+			typedef typename Iterator::reference			reference;
+			typedef typename Iterator::iterator_category	iterator_category;
 	};
 
 	template <class T>
 	class iterator_traits<T*>
 	{
-		typedef ptrdiff_t						difference_type;
-		typedef T								value_type;
-		typedef T*								pointer;
-		typedef T&								reference;
-		typedef ft::random_access_iterator_tag	iterator_category;
-		//  iterator_traits() { std::cout << "iterator_traits * created" << std::endl; }
-
+		public:
+			typedef ptrdiff_t						difference_type;
+			typedef T								value_type;
+			typedef T*								pointer;
+			typedef T&								reference;
+			typedef ft::random_access_iterator_tag	iterator_category;
 	};
 
 	template <class T>
 	class iterator_traits<const T*>
 	{
-		typedef ptrdiff_t						difference_type;
-		typedef T								value_type;
-		typedef const T*						pointer;
-		typedef const T&						reference;
-		typedef ft::random_access_iterator_tag	iterator_category;
-		//  iterator_traits() { std::cout << "const iterator_traits * created" << std::endl; }
-
+		public:
+			typedef ptrdiff_t						difference_type;
+			typedef T								value_type;
+			typedef const T*						pointer;
+			typedef const T&						reference;
+			typedef ft::random_access_iterator_tag	iterator_category;
 	};
 
 	// random_access_iterator
@@ -154,6 +145,7 @@ namespace ft
 			pointer ptr;
 	};
 
+	// reverse_iterator
 	template <class Iterator>
 	class reverse_iterator
 	{
@@ -253,7 +245,6 @@ namespace ft
 	template <class Iterator>
 	bool operator<=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) { return (lhs.base() <= rhs.base()); }
 
-
 	// basic methods
 	template <class InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last)
@@ -267,6 +258,5 @@ namespace ft
 		return n;
 	};
 }
-
 	
 #endif

@@ -54,11 +54,11 @@ namespace ft
 					
 			: _allocator(alloc)
 			{
-				if (typeid(typename InputIterator::iterator_category) == typeid(ft::random_access_iterator_tag))
+				if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::random_access_iterator_tag))
 				{
 					try
 					{
-            			typename InputIterator::difference_type n = ft::distance(first, last);
+            			difference_type n = ft::distance(first, last);
 						init(n);
 						for (unsigned int i = 0; i < n; i++)
 						{
@@ -105,7 +105,49 @@ namespace ft
 			reverse_iterator		rend() { return reverse_iterator(begin()); }
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
+			// capacity
+			size_type				size() const { return (_last - _first); }
+			size_type				max_size() const { return (_allocator.max_size()); }
+			size_type				capacity() const { return (_end - _first); }
+			bool					empty() const { return (!_first); }
+
+			// element access
+			reference 				operator[](size_type n) { return *(_first + n); }
+			const_reference			operator[](size_type n) const { return *(_first + n); }
+			reference				at(size_type n)
+			{
+				if (n >= size())
+					throw (std::out_of_range("vector::at() access denied at position >= vector::size()"));
+				return operator[](n);
+			}
+			const_reference			at(size_type n) const
+			{
+				if (n >= size())
+					throw (std::out_of_range("vector::at() access denied at position >= vector::size()"));
+				return operator[](n);
+			}
+			reference				front() { return *_first; }
+			const_reference			front() const { return *_first; }
+			reference				back() { return *(_last - 1); }
+			const_reference			back() const { return *(_last - 1); }
+
 			// modifiers
+			template <class InputIterator>
+			void	assign(InputIterator first, InputIterator last)
+			{
+				difference_type n = ft::distance(first, last);
+				// if (n > capacity())
+				// {
+				// 	clear();
+				// 	init(dist);
+				// }
+				// else
+				// 	destroy(_first, _first + dist);
+				while (first != last)
+				{
+					_first = first->();
+				}
+			}
 			// void	push_back(const value_type& val)
 			// {
 

@@ -4,34 +4,20 @@
 #include <typeinfo>     // typeid
 #include <vector>
 
-template <class T>
-class A
-{
-    public:
-        A(T x) { std::cout << x << " is not a char"<< std::endl; }
-};
-
-template <>
-class A<char>
-{
-    public:
-        A(char x) { std::cout << x << " is a char"<< std::endl; }
-};
-
-int main()
-
-{
    
     
 //   typedef std::iterator_traits<int*> traits;
-  
+int main()
+{
     // if (typeid(std::vector<char>::iterator::iterator_category)==typeid(std::random_access_iterator_tag))
     // //     std::cout << "int* is a random-access iterator" << std::endl;
     // std::vector<int> v(3, 222);
-
-    A<int> a(5);
-    A<float> b(4.11);
-    A<char> n('4');
+    std::vector<int> b(5, 111);
+    std::vector<int> c(5, 222);
+    std::vector<int>::iterator it = c.begin();
+    b.assign(it + 1, c.end() - 1);
+    for (int i = 0; i < 5; i++)
+        std::cout << b[i] << std::endl;
     // std::vector<int >::iterator it1 = v.begin();
     // // std::vector<int >::iterator it2 = v.end();
     
