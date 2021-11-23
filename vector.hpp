@@ -93,7 +93,7 @@ namespace ft
 					catch(const std::exception& e) {
 						throw ; }
 			}
-			~vector<T>() { clear(); }
+			~vector<T>() { clean(); }
 		
 			// iterators
 			iterator				begin() { return iterator(_first); }
@@ -108,8 +108,60 @@ namespace ft
 			// capacity
 			size_type				size() const { return (_last - _first); }
 			size_type				max_size() const { return (_allocator.max_size()); }
+			// void					resize(size_type n, value_type val = value_type())
+			// {
+			// 	if (size() > n)
+			// 	{
+			// 		destroy(_first + n, _last);
+			// 		_last = _first + n;
+			// 		_end = _last;
+			// 		for (size_type i=0; i < n; i++)
+			// 			std::cout << _first[i] << " ";
+			// 		std::cout << std::endl;
+				
+			// 	}
+				// else if (size() < n)
+				// {
+				// 	reserve(n);
+				// 	for (size_type i=0; i < n; i++)
+				// 		std::cout << _first[i] << " ";
+				// 	std::cout << std::endl;
+				// 	for (size_type i = 0; i < )
+				// 	{
+				// 		*_first = val;
+				// 		_last++;
+				// 	}
+				// }
+			// }
+
 			size_type				capacity() const { return (_end - _first); }
 			bool					empty() const { return (!_first); }
+			void					reserve(size_type n)
+			{
+				if (max_size() < n)
+					throw (std::length_error("size requested by vector::reserve > vector::max_size()"));
+				else if (capacity() < n)
+				{
+					pointer		_old_first = _first;
+					pointer		_old_last = _last;
+					size_type	_old_size = size();
+					size_type	_old_capacity = capacity();
+					try
+					{
+						init(n);
+						for (size_type i = 0; i < _old_size; i++)
+						{
+							_allocator.construct(_last, *(_old_first + i));
+							_last++;
+						}
+					}
+					catch(const std::exception& e) {
+						throw ; }
+					if (_old_first)
+						destroy(_old_first, _old_last);
+					_allocator.deallocate(_old_first, _old_capacity);
+				}
+			}
 
 			// element access
 			reference 				operator[](size_type n) { return *(_first + n); }
@@ -133,25 +185,115 @@ namespace ft
 
 			// modifiers
 			template <class InputIterator>
-			void	assign(InputIterator first, InputIterator last)
+			void	assign(InputIterator first, InputIterator last,
+							typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 			{
-				difference_type n = ft::distance(first, last);
-				// if (n > capacity())
-				// {
-				// 	clear();
-				// 	init(dist);
-				// }
-				// else
-				// 	destroy(_first, _first + dist);
-				while (first != last)
+				if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::random_access_iterator_tag))
 				{
-					_first = first->();
+            		difference_type n = ft::distance(first, last);
+					try
+					{
+						if (n > static_cast<difference_type>(capacity()))
+						{
+							clean();
+							init(n);
+						}
+						else
+							destroy(_first, _first + n);
+					}
+					catch(const std::exception& e) {
+						throw ; }
+					_last = _first;
+					for (unsigned int i = 0; i < n; i++)
+					{
+						_allocator.construct(_last, first[i]);
+						_last++;
+					}
+				}
+				else
+				{
+					std::cout << "Error : invalid input iterator" << std:: endl;
+					throw ;
 				}
 			}
+
+			void	assign(size_type n, const value_type& val)
+			{
+				if (n > capacity())
+				{
+					clean();
+					init(n);
+				}
+				else
+					destroy(_first, _first + n);
+				_last = _first;
+				while (n--)
+				{
+					_allocator.construct(_last, val);
+					_last++;
+				}
+			}
+
+			iterator	insert(iterator position, const value_type& val)
+			{
+				difference_type n = position - begin();
+				insert(position, 1, val);
+				return (begin() + n);
+			}
+
+			void	insert(iterator position, size_type n, const value_type& val)
+			{
+				difference_type dist_to_pos = ft::distance(begin(), position);
+				difference_type dist_to_end = ft::distance(position, end());
+				if (n == 0)
+					return ;
+				else if (max_size() - size() < n)
+					throw (std::length_error("size requested by vector::insert > vector::max_size()"));
+				else if (size() + n > capacity())
+					reserve(size() + capacity() > 0 ? size() * 2 : 1);
+				pointer pos = _first + dist_to_pos;
+				_last = pos + n + dist_to_end;
+				for ( ; dist_to_end; dist_to_end--)
+				{
+					_allocator.construct(pos + n + dist_to_end - 1, pos[dist_to_end - 1]);
+					_allocator.destroy(pos + dist_to_end - 1);
+				}
+				for (size_type i = 0; i < n; i++)
+					*(pos + i) = val;
+			}
+
+			template <class InputIterator>
+			void	insert(iterator position, InputIterator first, InputIterator last,
+							typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+			{
+				if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::random_access_iterator_tag))
+				{
+					difference_type dist_to_pos = ft::distance(begin(), position);
+					difference_type dist_to_end = ft::distance(position, end());
+					size_type		n = ft::distance(first, last);
+					if (n == 0)
+						return ;
+					else if (max_size() - size() < n)
+						throw (std::length_error("size requested by vector::insert > vector::max_size()"));
+					else if (size() + n > capacity())
+						reserve(size() + capacity() > 0 ? size() * 2 : 1);
+					pointer pos = _first + dist_to_pos;
+					_last = pos + n + dist_to_end;
+					for ( ; dist_to_end; dist_to_end--)
+					{
+						_allocator.construct(pos + n + dist_to_end - 1, pos[dist_to_end - 1]);
+						_allocator.destroy(pos + dist_to_end - 1);
+					}
+					for (size_type i = 0; i < n; i++)
+						*(pos + i) = first[i];
+				}	
+			}
+
 			// void	push_back(const value_type& val)
 			// {
 
 			// }
+
 
 		protected:
 			allocator_type	_allocator;
@@ -177,12 +319,14 @@ namespace ft
 					}
 				}
 			}
+
 			void	destroy(pointer first, pointer last)
 			{
 				for ( ; first != last; first++)
 					_allocator.destroy(first);
 			}
-			void	clear()
+
+			void	clean()
 			{
 				if (_first)
 					destroy(_first, _last);

@@ -7,25 +7,37 @@
    
     
 //   typedef std::iterator_traits<int*> traits;
-int main()
+int main ()
 {
-    // if (typeid(std::vector<char>::iterator::iterator_category)==typeid(std::random_access_iterator_tag))
-    // //     std::cout << "int* is a random-access iterator" << std::endl;
-    // std::vector<int> v(3, 222);
-    std::vector<int> b(5, 111);
-    std::vector<int> c(5, 222);
-    std::vector<int>::iterator it = c.begin();
-    b.assign(it + 1, c.end() - 1);
-    for (int i = 0; i < 5; i++)
-        std::cout << b[i] << std::endl;
-    // std::vector<int >::iterator it1 = v.begin();
-    // // std::vector<int >::iterator it2 = v.end();
-    
-    // // std::vector<int >::iterator it2 = v.begin();
-    // std::cout << it1[4] << std::endl;
-    
-    // std::vector<int> v4(it1, it2);
+	std::vector<int> myvector(10,10);
+	std::vector<int>::iterator it;
+	myvector.reserve(10);
 
 
-    return 0;
+	it = myvector.begin();
+	it = myvector.insert ( it , 2200 );
+
+	myvector.insert (it + 2,5,300);
+	myvector.insert (myvector.end() - 1,0,900);
+	
+
+	// "it" no longer valid, get a new one:
+	it = myvector.begin();
+
+	std::vector<int> anothervector (2,400);
+	myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	int myarray [] = { 501,502,503 };
+	myvector.insert (myvector.begin(), myarray, myarray+3);
+
+	std::cout << "myvector contains:";
+	for (it=myvector.begin(); it<myvector.end(); it++)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	std::cout << "size: " << myvector.size() << std::endl;
+	std::cout << "capacity: " << myvector.capacity() << std::endl;
+	std::cout << "last: " << *(myvector.end() - 1) << std::endl;
+	
+
+	return 0;
 }
