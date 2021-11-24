@@ -51,7 +51,6 @@ namespace ft
 			vector(InputIterator first, InputIterator last,
 					const allocator_type& alloc = allocator_type(),
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
-					
 			: _allocator(alloc)
 			{
 				if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::random_access_iterator_tag))
@@ -108,34 +107,16 @@ namespace ft
 			// capacity
 			size_type				size() const { return (_last - _first); }
 			size_type				max_size() const { return (_allocator.max_size()); }
-			// void					resize(size_type n, value_type val = value_type())
-			// {
-			// 	if (size() > n)
-			// 	{
-			// 		destroy(_first + n, _last);
-			// 		_last = _first + n;
-			// 		_end = _last;
-			// 		for (size_type i=0; i < n; i++)
-			// 			std::cout << _first[i] << " ";
-			// 		std::cout << std::endl;
-				
-			// 	}
-				// else if (size() < n)
-				// {
-				// 	reserve(n);
-				// 	for (size_type i=0; i < n; i++)
-				// 		std::cout << _first[i] << " ";
-				// 	std::cout << std::endl;
-				// 	for (size_type i = 0; i < )
-				// 	{
-				// 		*_first = val;
-				// 		_last++;
-				// 	}
-				// }
-			// }
+			void					resize(size_type n, value_type val = value_type())
+			{
+				if (size() > n)
+					erase(begin() + n, end());
+				else if (size() < n)
+					insert(end(), n - size(), val);
+			}
 
 			size_type				capacity() const { return (_end - _first); }
-			bool					empty() const { return (!_first); }
+			bool					empty() const { return (size() == 0); }
 			void					reserve(size_type n)
 			{
 				if (max_size() < n)
@@ -172,12 +153,14 @@ namespace ft
 					throw (std::out_of_range("vector::at() access denied at position >= vector::size()"));
 				return operator[](n);
 			}
+
 			const_reference			at(size_type n) const
 			{
 				if (n >= size())
 					throw (std::out_of_range("vector::at() access denied at position >= vector::size()"));
 				return operator[](n);
 			}
+
 			reference				front() { return *_first; }
 			const_reference			front() const { return *_first; }
 			reference				back() { return *(_last - 1); }
@@ -234,6 +217,8 @@ namespace ft
 				}
 			}
 
+			void	push_back(const value_type& val) { insert(end(), val); }
+			void	pop_back() { erase(end() - 1); }
 			iterator	insert(iterator position, const value_type& val)
 			{
 				difference_type n = position - begin();
@@ -289,11 +274,25 @@ namespace ft
 				}	
 			}
 
-			// void	push_back(const value_type& val)
-			// {
-
-			// }
-
+			iterator	erase(iterator position) { return (erase(position, position + 1)); }
+			iterator	erase(iterator first, iterator last)
+			{
+				if (last < first)
+					return (first);
+				size_type dist_to_first = ft::distance(begin(), first);
+				size_type dist_to_end = ft::distance(last, end());
+				size_type diff = ft::distance(first, last);
+				// std::cout << diff << std::endl;
+				destroy(first.base(), last.base());
+				_last = _first + dist_to_first;
+				for (size_type i = 0; i < dist_to_end; i++)
+				{
+				
+					_allocator.construct(_last, *(_first + dist_to_first + diff + i));
+					_last++;
+				}
+				return (begin() + dist_to_first);
+			}
 
 		protected:
 			allocator_type	_allocator;
