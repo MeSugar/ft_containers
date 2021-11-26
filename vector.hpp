@@ -10,7 +10,7 @@ namespace ft
 	class vector
 	{
 		public:
-			// aliases
+			// type aliases
 			typedef	T														value_type;
 			typedef Alloc													allocator_type;
 			typedef typename allocator_type::reference						reference;
@@ -24,7 +24,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; 
 			typedef size_t													size_type;
 		
-			// constructors && destructor
+			// member functions
 			explicit vector(const allocator_type& alloc = allocator_type())
 			: _allocator(alloc)
 			{
@@ -92,8 +92,20 @@ namespace ft
 					catch(const std::exception& e) {
 						throw ; }
 			}
+			
 			~vector<T>() { clean(); }
-		
+
+			vector& operator=(const vector& x)
+			{
+				if (*this == x)
+					return *this;
+				if (capacity())
+					clear();
+				insert(begin(), x.begin(), x.end());
+				return *this;
+
+			}
+
 			// iterators
 			iterator				begin() { return iterator(_first); }
 			iterator				end() { return iterator(_last); }
@@ -255,13 +267,19 @@ namespace ft
 				{
 					difference_type dist_to_pos = ft::distance(begin(), position);
 					difference_type dist_to_end = ft::distance(position, end());
+					size_type curr_capacity = capacity();
 					size_type		n = ft::distance(first, last);
 					if (n == 0)
 						return ;
 					else if (max_size() - size() < n)
 						throw (std::length_error("size requested by vector::insert > vector::max_size()"));
-					else if (size() + n > capacity())
-						reserve(size() + capacity() > 0 ? size() * 2 : 1);
+					else if (size() + n > curr_capacity)
+					{
+						curr_capacity = max_size() - curr_capacity / 2 < curr_capacity ? 0 : curr_capacity + curr_capacity / 2;
+						if (curr_capacity < size() + n)
+							curr_capacity = size() + n;
+						reserve(curr_capacity);
+					}
 					pointer pos = _first + dist_to_pos;
 					_last = pos + n + dist_to_end;
 					for ( ; dist_to_end; dist_to_end--)
@@ -282,7 +300,6 @@ namespace ft
 				size_type dist_to_first = ft::distance(begin(), first);
 				size_type dist_to_end = ft::distance(last, end());
 				size_type diff = ft::distance(first, last);
-				// std::cout << diff << std::endl;
 				destroy(first.base(), last.base());
 				_last = _first + dist_to_first;
 				for (size_type i = 0; i < dist_to_end; i++)
@@ -293,6 +310,22 @@ namespace ft
 				}
 				return (begin() + dist_to_first);
 			}
+
+			void	swap(vector& x)
+			{
+				allocator_type	tmp_allocator = _allocator;
+				pointer			tmp_first = _first;
+				pointer			tmp_last = _last;
+				pointer			tmp_end = _end;
+
+				_allocator = x._allocator; _first = x._first; _last = x._last; _end = x._end;
+				x._allocator = tmp_allocator; x._first = tmp_first; x._last = tmp_last; x._end = tmp_end;
+			}
+
+			void clear() { erase(begin(), end()); }
+			
+			// allocator
+			allocator_type	get_allocator() const { return _allocator; }
 
 		protected:
 			allocator_type	_allocator;
@@ -334,7 +367,32 @@ namespace ft
 			}
 		
 	};
-	//  std::ostream	&operator<<(std::ostream &o, vector const &src);
+
+	//non-member function overloads
+	template <class T, class Alloc>
+	void	swap(vector<T, Alloc>& x, vector<T, Alloc>& y) { x.swap(y); }
+	
+	template <class T, class Alloc>
+	bool	operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+		return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin())); 
+	}
+
+	template <class T, class Alloc>
+	bool	operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return !(lhs == rhs); }
+
+	template <class T, class Alloc>
+	bool	operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+		return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <class T, class Alloc>
+	bool	operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return !(rhs < lhs); }
+	
+	template <class T, class Alloc>
+	bool	operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)  { return (rhs < lhs); }
+
+	template <class T, class Alloc>
+	bool	operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs)  { return !(lhs < rhs); }
 }
 
 #endif

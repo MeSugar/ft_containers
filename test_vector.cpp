@@ -76,22 +76,45 @@
 
 int main ()
 {
-  std::vector<int> myvector;
+	std::vector<int>::size_type sz;
+	std::vector<int> foo(10);
+	std::vector<int>::iterator it = foo.begin();
 
-  // set some initial content:
-  for (int i=1;i<10;i++) myvector.push_back(i);
+	sz = foo.capacity();
+	// std::cout << "making foo grow:\n";
+	for (unsigned long i = 0; i < foo.size(); i++)
+	{
+		it[i] = i;
+	}
+	for (unsigned long i = 0; i < foo.size(); i++)
+	{
+		std::cout << it[i] << " ";	
+	}
+	std::cout << std::endl;
+	foo.reserve(20);
+	if (sz != foo.capacity())
+	{
+		sz = foo.capacity();
+		std::cout << "capacity changed: " << sz << '\n';
+	}
+	it = foo.begin();
+	for (unsigned long i = 0; i < foo.size(); i++)
+	{
+		it[i] = i;
+	}
+	for (unsigned long i = 0; i < foo.size(); i++)
+	{
+		std::cout << it[i] << " ";	
+	}
+	std::cout << std::endl;
+	foo.reserve(10);
+	for (unsigned long i = 0; i < foo.size(); i++)
+	{
+		std::cout << it[i] << " ";	
+	}
+	std::cout << std::endl;
+	std::cout << "size: "<< foo.size() << std::endl;
+	std::cout << "capacity: " << foo.capacity() << std::endl;
 
-  myvector.resize(5);
-  myvector.resize(8,100);
-  myvector.resize(12);
-
-  std::cout << "myvector contains:";
-  for (unsigned int i=0;i<myvector.size();i++)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
-  std::cout << myvector.size() << std::endl;
-  std::cout << myvector.capacity() << std::endl;
-
-
-  return 0;
+	return 0;
 }
