@@ -1,12 +1,12 @@
-NAME		=	Vector
+NAME		=	Map_test
 
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 
-CC			=	clang++
+CC			=	g++
 
-INCLUDES	=	utility.hpp iterator.hpp vector.hpp
+INCLUDES	=	utility.hpp iterator.hpp vector.hpp map.hpp
 
-SRCS		=	main.cpp
+SRCS		=	main_for_map.cpp
 
 all : $(NAME)
 
