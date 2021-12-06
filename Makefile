@@ -4,7 +4,7 @@ CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 
 CC			=	g++
 
-INCLUDES	=	utility.hpp iterator.hpp vector.hpp map.hpp
+INCLUDES	=	utility.hpp iterator.hpp tree.hpp vector.hpp map.hpp
 
 SRCS		=	main_for_map.cpp
 

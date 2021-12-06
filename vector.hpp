@@ -331,7 +331,7 @@ namespace ft
 			allocator_type	_allocator;
 			pointer			_first, _last, _end;
 
-			// private methods
+			// protected methods
 			void	init(size_type n)
 			{
 				if (!n) {
