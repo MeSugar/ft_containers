@@ -1,170 +1,120 @@
 #include "map.hpp"
 // #include "vector.hpp"
 #include <map>
-
-// template <class T>
-// class node
-// {
-// 	public:
-// 		T data;
-// 		node *parent;
-// 		node *right;
-// 		node *left;
-// 		node(T new_data) : data(new_data), parent(0), right(0), left(0) {}
-// };
+// #include <algorithm>
+// #include <chrono>
+// #include <iostream>
+// #include <random>
+// #include <vector>
 
 
-// template <class T, class U>
-// void add(T data, U object)
-// {
-// 	if (object && object->data && data >= object->data)
-// 	{
-// 		if (!object->right)
-// 		{
-// 			object->right = new node<T>(data);
-// 			object->right->parent = object;
-// 			return ;
-// 		}
-// 		return add(data, object->right);
-// 	}
-// 	if (!object->left)
-// 	{
-// 		object->left = new node<T>(data);
-// 		object->left->parent = object;
-// 		return ;
-// 	}
-// 	return add(data, object->left);
-// }
-
-// t_node *create_tree(int *arr)
-// {
-// 	t_node *head;
-// 	t_node *tmp;
-// 	head = new t_node();
-
-// 	head->data = arr[0];
-// 	head->parent = 0;
-// 	head->right = 0;
-// 	head->left = 0;
-// 	int i = 1;
-// 	tmp = head;
-
-// 	while (i < 8)
-// 	{
-// 		if (tmp->left && arr[i] < tmp->data)
-// 			tmp = tmp->left;
-// 		else if (tmp->right && arr[i] >= tmp->data)
-// 			tmp = tmp->right;
-// 		else if (!tmp->left && arr[i] < tmp->data)
-// 		{
-// 			tmp->left = new t_node();
-// 			tmp->left->left = 0;
-// 			tmp->left->right = 0;
-// 			tmp->left->data = arr[i];
-// 			tmp->left->parent = tmp;
-// 			i++;
-// 			tmp = head;
-// 		}
-// 		else if (!tmp->right && arr[i] >= tmp->data)
-// 		{
-// 			tmp->right = new t_node();
-// 			tmp->right->left = 0;
-// 			tmp->right->right = 0;
-// 			tmp->right->data = arr[i];
-// 			tmp->right->parent = tmp;
-// 			i++;
-// 			tmp = head;
-// 		}
-// 	}
-// 	return head;
-// }
-
-// template <class T>
-// void preorder_traversal(node<T> *tree)
-// {
-// 	// bool	is_printed = false;
-// 	node<T>	*tmp;
-// 	node<T>	*to_go_right;
-
-// 	tmp = tree;
-// 	to_go_right = tree;
-// 	while (tmp)
-// 	{
-// 		std::cout << tmp->data << std::endl;
-// 		if (tmp->right)
-// 			to_go_right = tmp;
-// 		if (tmp->left)
-// 			tmp = tmp->left;
-// 		else if (!tmp->left)
-// 		{
-// 			while (tmp != to_go_right)
-// 				tmp = tmp->parent;
-// 		}
-// 		if (tmp == to_go_right)
-// 		{
-// 			to_go_right = tmp->parent;			
-// 			tmp = tmp->right;
-// 			std::cout << tmp->data << std::endl;
-// 			if (tmp->right)
-// 				to_go_right = tmp;
-// 			if (tmp->left)
-// 				tmp = tmp->left;
-// 		}
-// 	}
-// }
-
-// template <typename T>
-// node<T> *right_rotate(node<T> *ptr)
-// {
-// 	node<T> *tmp = ptr->left;
-// 	ptr->left = tmp->right;
-// 	ptr->left->parent = ptr;
-// 	tmp->right = ptr;
-// 	ptr->parent = tmp;
-// 	tmp->parent = NULL;
-// 	return (tmp);
-// }
 
 int main()
 {
-	// int arr[] = { 1, 24, -11,-10, 13, 1, -33, -44};
-	// // node<int> *tree = create_tree(arr);
-	// node<int> *tree = new node<int>(arr[0]);
-	// for (int i = 1; i < 8; i++)
-	// 	add(arr[i], tree);
-	// tree = right_rotate(tree);
-	// preorder_traversal(tree);
-	// std::cout << tree->data << std::endl;
-	// std::cout << tree->left->data << std::endl;
-	// std::cout << tree->left->right->data << std::endl;
-	// std::cout << tree->left->left->data << std::endl;
-	// std::cout << tree->left->left->left->data << std::endl;
-	// std::cout << tree->right->data << std::endl;
-	// std::cout << tree->right->left->data << std::endl;
-	// std::cout << tree->right->left->left->data << std::endl;
-
-	// ft::node<int, int> nd(1, 2);
-	// ft::RBTree<int, int>* tree = new ft::RBTree<int, int>;
-	// std::cout << nd.value.first << " " << nd.value.second << std::endl;
-	// tree->add(nd.value);
-	// std::cout << tree->get_root()->value.first << ' ' << tree->get_root()->value.second << std::endl;
-	// std::cout << tree->get_size() << std::endl;
-
 	ft::node<std::string, int> nd1("ehe", 121);
 	ft::node<std::string, int> nd2("ehu", 122);
-	ft::node<std::string, int> nd3("www", 123);
-	ft::node<std::string, int> nd4("bba", 124);
+	ft::node<std::string, int> nd3("bbag", 123);
+	ft::node<std::string, int> nd4("www", 124);
+	ft::node<std::string, int> nd5("bba", 125);
+	ft::node<std::string, int> nd6("aaa", 126);
+	ft::node<std::string, int> nd7("bhaa", 127);
+	ft::node<std::string, int> nd8("bbsasda", 128);
+	ft::node<std::string, int> nd9("ddzag", 129);
+	ft::node<std::string, int> nd10("dag", 130);
+	ft::node<std::string, int> nd11("czg", 131);
+	ft::node<std::string, int> nd12("ea", 132);
+	ft::node<std::string, int> nd13("qqa", 133);
+	ft::node<std::string, int> nd14("her", 134);
+	ft::node<std::string, int> nd15("wery", 135);
+	ft::node<std::string, int> nd16("aadtr", 136);
+	ft::node<std::string, int> nd17("utdf", 137);
+
 	ft::RBTree<std::string, int>* tree = new ft::RBTree<std::string, int>;
-	tree->add(nd1.value);
-	tree->add(nd2.value);
-	tree->add(nd3.value);
-	tree->add(nd4.value);
-	std::cout << tree->height() << std::endl;
-	std::cout << tree->black_nodes(tree->get_root()) << std::endl;
-	// if (nd1.value.first > nd2.value.first)
-	// 	std::cout << nd1.value.first << " is greater than " << nd2.value.first << std::endl;
-	// else
-	// 	std::cout << nd1.value.first << " is less than " << nd2.value.first << std::endl;
-	
-	
+	tree->add_node(nd1.value);
+	tree->add_node(nd2.value);
+	tree->add_node(nd3.value);
+	tree->add_node(nd4.value);
+	tree->add_node(nd5.value);
+	tree->add_node(nd6.value);
+	tree->add_node(nd7.value);
+	tree->add_node(nd8.value);
+	tree->add_node(nd9.value);
+	tree->add_node(nd10.value);
+	tree->add_node(nd11.value);
+	tree->add_node(nd12.value);
+	tree->add_node(nd13.value);
+	tree->add_node(nd14.value);
+	tree->add_node(nd15.value);
+	tree->add_node(nd16.value);
+	tree->add_node(nd17.value);
+
+	std::cout << "my fukin' tree:" << std::endl;
+	tree->inOrderHelper(tree->get_root());
+	std::cout << std::endl;
+
+	//original map
+	std::map<std::string, int>* mapTree = new std::map<std::string, int>;
+	mapTree->insert(std::pair<std::string, int>("ehe", 121));
+	mapTree->insert(std::pair<std::string, int>("ehu", 122));
+	mapTree->insert(std::pair<std::string, int>("bbag", 123));
+	mapTree->insert(std::pair<std::string, int>("www", 124));
+	mapTree->insert(std::pair<std::string, int>("bba", 125));
+	mapTree->insert(std::pair<std::string, int>("aaa", 126));
+	mapTree->insert(std::pair<std::string, int>("bhaa", 127));
+	mapTree->insert(std::pair<std::string, int>("bbsasda", 128));
+	mapTree->insert(std::pair<std::string, int>("ddzag", 129));
+	mapTree->insert(std::pair<std::string, int>("dag", 130));
+	mapTree->insert(std::pair<std::string, int>("czg", 131));
+	mapTree->insert(std::pair<std::string, int>("ea", 132));
+	mapTree->insert(std::pair<std::string, int>("qqa", 133));
+	mapTree->insert(std::pair<std::string, int>("her", 134));
+	mapTree->insert(std::pair<std::string, int>("wery", 135));
+	mapTree->insert(std::pair<std::string, int>("aadtr", 136));
+	mapTree->insert(std::pair<std::string, int>("utdf", 137));
+
+	std::map<std::string, int>::iterator it = mapTree->begin();
+	std::cout << "their fukin' tree:" << std::endl;
+	for (it = mapTree->begin(); it != mapTree->end(); ++it)
+    	std::cout << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
+
+	// std::cout << tree->height() << std::endl;
+	// std::cout << tree->black_nodes(tree->get_root()) << std::endl;
 }
+
+
+// tree test
+// int main()
+// {
+// 	std::vector<int> numbers;
+
+//     for(int i=0; i<100; i++)       // add 0-99 to the vector
+//         numbers.push_back(i);
+//     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//     std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
+//     for(int i=0; i<100; i++)        // print the first 40 randomly sorted numbers
+//         std::cout << numbers[i] << std::endl;
+// 	std::map<int, int> *mapTree = new std::map<int, int>;
+// 	ft::RBTree<int, int> *tree = new ft::RBTree<int, int>;
+// 	ft::node<int, int> *nodes[100];
+	
+// 	for(int i=0; i<100; i++)
+// 	{
+// 		nodes[i] = new ft::node<int, int>(numbers[i], numbers[i]);
+// 	}
+// 	for (int i = 0; i < 100; i++)
+// 		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i]));
+	
+	
+// 	std::map<int, int>::iterator it = mapTree->begin();
+// 	std::ofstream ofs1("test1");
+// 	for (it = mapTree->begin(); it != mapTree->end(); ++it)
+//     	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
+//     for(int i=0; i<100; i++)
+// 	{
+// 		tree->add_node(nodes[i]->value);
+// 	}
+// 	std::ofstream ofs("test2");
+// 	tree->inOrderHelper(tree->get_root());
+// 	std::cout << std::endl;
+
+// }

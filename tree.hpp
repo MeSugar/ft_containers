@@ -2,6 +2,8 @@
 # define TREE_H
 
 #include "utility.hpp"
+#include <fstream>
+
 
 namespace ft
 {
@@ -68,10 +70,10 @@ namespace ft
 			~RBTree() {}
 
 			// methods
-			pointer get_root() { return _root; }
-			int		get_size() { return _size; }
+			pointer		get_root() { return _root; }
+			size_type	get_size() { return _size; }
 
-			void	add(value_type& val = value_type())
+			void	add_node(value_type& val = value_type())
 			{
 				try
 				{
@@ -84,7 +86,8 @@ namespace ft
 						_size++;
 						return ;
 					}
-					add(_root, new_node);
+					else
+						add_node(_root, new_node);
 					_size++;
 				}
 				catch(const std::exception& e)
@@ -92,6 +95,11 @@ namespace ft
 					std::cerr << e.what() << std::endl;
 					throw ;
 				}
+			}
+
+			void	delete_node(pointer ptr)
+			{
+
 			}
 
 			void	left_rotate(pointer ptr)
@@ -220,7 +228,7 @@ namespace ft
 					return ;
 				}
 				// aunt is node->parent->parent->left
-				if (!ptr->parent->parent->left || ptr->parent->parent->left->is_black)
+				if (ptr->parent->parent && (!ptr->parent->parent->left || ptr->parent->parent->left->is_black))
 					return rotate(ptr);
 				 // color flip
 				if (ptr->parent->parent->left)
@@ -232,10 +240,15 @@ namespace ft
 			void	check_color(pointer ptr)
 			{
 				if (ptr == _root)
+				{
+					ptr->is_black = true;
+					black_nodes(_root);
 					return ;
-				if (!ptr->is_black && !ptr->parent->is_black)
+				}
+				if (ptr->parent->parent && !ptr->is_black && !ptr->parent->is_black)
 					correct_tree(ptr);
-				check_color(ptr->parent);
+				if (ptr->parent)
+					check_color(ptr->parent);
 			}
 
 			size_type	height()
@@ -263,10 +276,31 @@ namespace ft
 				size_type right_black_nodes = black_nodes(ptr->right);
 				size_type left_black_nodes = black_nodes(ptr->left);
 				if (left_black_nodes != right_black_nodes)
-					correct_tree(ptr);
+				{
+					std::cout << "error: tree contains wrong number of black nodes" << std::endl;
+				}
 				if (ptr->is_black)
 					left_black_nodes++;
 				return left_black_nodes;
+			}
+
+			void preOrderHelper(pointer ptr) 
+			{
+				if (ptr)
+				{
+					std::cout << ptr->value.first << " ";
+					preOrderHelper(ptr->left);
+					preOrderHelper(ptr->right);
+				} 
+			}
+			void inOrderHelper(pointer ptr)
+			{				
+				if (ptr)
+				{
+					inOrderHelper(ptr->left);
+					std::cout << ptr->value.first << " => " << ptr->value.second << " => " << ptr->is_black << '\n';
+					inOrderHelper(ptr->right);
+				} 
 			}
 
 		protected:
@@ -275,7 +309,7 @@ namespace ft
 			size_type			_size;
 			key_compare			_comp;
 
-			void	add(pointer parent, pointer new_node)
+			void	add_node(pointer parent, pointer new_node)
 			{
 				if (_comp(parent->value.first, new_node->value.first))
 				{
@@ -284,20 +318,25 @@ namespace ft
 						parent->right = new_node;
 						new_node->parent = parent;
 						new_node->is_leftchild = false;
-						return ;
+						check_color(new_node);
 					}
-					return add(parent->right, new_node);
+					else
+						add_node(parent->right, new_node);
 				}
-				if (!parent->left)
+				else
 				{
-					parent->left = new_node;
-					new_node->parent = parent;
-					new_node->is_leftchild = true;
-					return ;
+					if (!parent->left)
+					{
+						parent->left = new_node;
+						new_node->parent = parent;
+						new_node->is_leftchild = true;
+						check_color(new_node);
+					}
+					else
+						add_node(parent->left, new_node);
 				}
-				return add(parent->left, new_node);
-				check_color(new_node);
 			}
+			
 	};
 }
 
