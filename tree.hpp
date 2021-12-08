@@ -73,7 +73,7 @@ namespace ft
 			pointer		get_root() { return _root; }
 			size_type	get_size() { return _size; }
 
-			void	add_node(value_type& val = value_type())
+			void	add(value_type &val)
 			{
 				try
 				{
@@ -87,7 +87,7 @@ namespace ft
 						return ;
 					}
 					else
-						add_node(_root, new_node);
+						add(_root, new_node);
 					_size++;
 				}
 				catch(const std::exception& e)
@@ -97,9 +97,11 @@ namespace ft
 				}
 			}
 
-			void	delete_node(pointer ptr)
+			void	remove(value_type &val)
 			{
-
+				pointer ptr = contains(val);
+				if (ptr)
+					remove(ptr);
 			}
 
 			void	left_rotate(pointer ptr)
@@ -269,6 +271,46 @@ namespace ft
 				return right_height;
 			}
 
+			pointer		minimum(pointer ptr)
+			{
+				while (ptr->left)
+					ptr = ptr->left;
+				return ptr;
+			}
+
+			pointer		maximum(pointer ptr)
+			{
+				while (ptr->right)
+					ptr = ptr->right;
+				return ptr;
+			}
+
+			pointer		predecessor(pointer ptr)
+			{
+				if (ptr->left)
+					return (maximum(ptr->left));
+				pointer tmp = ptr->parent;
+				while (tmp && ptr == tmp->left)
+				{
+					ptr = tmp;
+					tmp = tmp->parent;
+				}
+				return tmp;
+			}
+
+			pointer		successor(pointer ptr)
+			{
+				if (ptr->right)
+					return (minimum(ptr->right));
+				pointer tmp = ptr->parent;
+				while (tmp && ptr == tmp->right)
+				{
+					ptr = tmp;
+					tmp = tmp->parent;
+				}
+				return tmp;
+			}
+
 			size_type	black_nodes(pointer ptr)
 			{
 				if (!ptr)
@@ -293,6 +335,7 @@ namespace ft
 					preOrderHelper(ptr->right);
 				} 
 			}
+
 			void inOrderHelper(pointer ptr)
 			{				
 				if (ptr)
@@ -303,13 +346,15 @@ namespace ft
 				} 
 			}
 
+			pointer	contains(value_type &val) { return contains(val, _root); }
+
 		protected:
 			allocator_type		_allocator;
 			pointer				_root;
 			size_type			_size;
 			key_compare			_comp;
 
-			void	add_node(pointer parent, pointer new_node)
+			void	add(pointer parent, pointer new_node)
 			{
 				if (_comp(parent->value.first, new_node->value.first))
 				{
@@ -321,7 +366,7 @@ namespace ft
 						check_color(new_node);
 					}
 					else
-						add_node(parent->right, new_node);
+						add(parent->right, new_node);
 				}
 				else
 				{
@@ -333,10 +378,79 @@ namespace ft
 						check_color(new_node);
 					}
 					else
-						add_node(parent->left, new_node);
+						add(parent->left, new_node);
 				}
 			}
+
+			void	remove(pointer ptr)
+			{
+				// case 1: node has no children
+				if (!ptr->left && !ptr->right)
+				{
+					if (!ptr->is_black)
+						remove_leaf(ptr);
+					else
+					{
+						if ()
+					}
+				}
+
+				// case 2.1: node has only left child
+				else if (ptr->left && !ptr->right)
+				{
+					if (ptr->is_leftchild)
+					{
+						ptr->parent->left = ptr->left;
+						check_color(ptr->left);
+					}
+					else
+					{
+						ptr->parent->right = ptr->left;
+						check_color(ptr->left);
+					}
+				}
+				// case 2.2: node has only right child
+				else if (ptr->right && !ptr->left)
+				{
+					if (ptr->is_leftchild)
+					{
+						ptr->parent->left = ptr->right;
+						check_color(ptr->right);
+					}
+					else
+					{
+						ptr->parent->right = ptr->right;
+						check_color(ptr->right);
+					}
+				}
+				// case 3: node has both children
+			}
+
+			void	remove_leaf(pointer ptr)
+			{
+					if (ptr->is_leftchild)
+						ptr->parent->left = NULL;
+					else
+						ptr->parent->right = NULL;
+					destroy_n_dealloc(ptr);
+			}
 			
+			pointer	contains(value_type &val, pointer ptr)
+			{
+				if (!ptr)
+					return NULL;
+				if (ptr->value.first == val.first)
+					return ptr;
+				if (_comp(val.first, ptr->value.first))
+					return contains(val, ptr->left);
+				return contains(val, ptr->right);
+			}
+
+			void	destroy_n_dealloc(pointer ptr)
+			{
+				_allocator.destroy(ptr);
+				_allocator.deallocate(ptr, 1);
+			}
 	};
 }
 

@@ -30,23 +30,23 @@ int main()
 	ft::node<std::string, int> nd17("utdf", 137);
 
 	ft::RBTree<std::string, int>* tree = new ft::RBTree<std::string, int>;
-	tree->add_node(nd1.value);
-	tree->add_node(nd2.value);
-	tree->add_node(nd3.value);
-	tree->add_node(nd4.value);
-	tree->add_node(nd5.value);
-	tree->add_node(nd6.value);
-	tree->add_node(nd7.value);
-	tree->add_node(nd8.value);
-	tree->add_node(nd9.value);
-	tree->add_node(nd10.value);
-	tree->add_node(nd11.value);
-	tree->add_node(nd12.value);
-	tree->add_node(nd13.value);
-	tree->add_node(nd14.value);
-	tree->add_node(nd15.value);
-	tree->add_node(nd16.value);
-	tree->add_node(nd17.value);
+	tree->add(nd1.value);
+	tree->add(nd2.value);
+	tree->add(nd3.value);
+	tree->add(nd4.value);
+	tree->add(nd5.value);
+	tree->add(nd6.value);
+	tree->add(nd7.value);
+	tree->add(nd8.value);
+	tree->add(nd9.value);
+	tree->add(nd10.value);
+	tree->add(nd11.value);
+	tree->add(nd12.value);
+	tree->add(nd13.value);
+	tree->add(nd14.value);
+	tree->add(nd15.value);
+	tree->add(nd16.value);
+	tree->add(nd17.value);
 
 	std::cout << "my fukin' tree:" << std::endl;
 	tree->inOrderHelper(tree->get_root());
@@ -76,6 +76,17 @@ int main()
 	std::cout << "their fukin' tree:" << std::endl;
 	for (it = mapTree->begin(); it != mapTree->end(); ++it)
     	std::cout << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
+	
+	// ft::node<std::string, int> nd18("utd", 138);
+	tree->remove(nd17.value);
+
+	// contains check
+	// ft::node<std::string, int> nd18("utd", 138);
+	// if (tree->contains(nd18.value))
+	// 	std::cout << "YEAH" << std::endl;
+	// else
+	// 	std::cout << "NOPE" << std::endl;
+
 
 	// std::cout << tree->height() << std::endl;
 	// std::cout << tree->black_nodes(tree->get_root()) << std::endl;
@@ -111,10 +122,12 @@ int main()
 //     	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
 //     for(int i=0; i<100; i++)
 // 	{
-// 		tree->add_node(nodes[i]->value);
+// 		tree->add(nodes[i]->value);
 // 	}
 // 	std::ofstream ofs("test2");
 // 	tree->inOrderHelper(tree->get_root());
 // 	std::cout << std::endl;
 
 // }
+
+
