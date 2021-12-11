@@ -110,34 +110,50 @@ int main()
 	std::vector<int> numbers;
 
     for(int i=0; i<100; i++)       // add 0-99 to the vector
+	{
         numbers.push_back(i);
+	}
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
     // for(int i=0; i<100; i++)        // print the first 40 randomly sorted numbers
+	// {
     //     std::cout << numbers[i] << std::endl;
+	// }
 	std::map<int, int> *mapTree = new std::map<int, int>;
-	ft::RBTree<int, int> *tree = new ft::RBTree<int, int>;
-	ft::node<int, int> *nodes[100];
+	ft::RBTree<int, ft::pair<int, int> > *tree = new ft::RBTree<int, ft::pair<int, int> >;
+	ft::node<ft::pair<int, int> > *nodes[100];
 	
 	for(int i=0; i<100; i++)
 	{
-		nodes[i] = new ft::node<int, int>(numbers[i], numbers[i]);
+		nodes[i] = new ft::node<ft::pair<int, int> >(ft::pair<int, int>(numbers[i], numbers[i]));
 	}
 	for (int i = 0; i < 100; i++)
+	{
 		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i]));
-	mapTree->erase(nodes[15]->value.first);
-	mapTree->erase(nodes[99]->value.first);
-	mapTree->erase(nodes[10]->value.first);
-	mapTree->erase(nodes[12]->value.first);
-	mapTree->erase(nodes[55]->value.first);
-	mapTree->erase(nodes[16]->value.first);
-	mapTree->erase(nodes[77]->value.first);
-	mapTree->erase(nodes[32]->value.first);
+	}
+	mapTree->erase(numbers[15]);
+	mapTree->erase(numbers[99]);
+	mapTree->erase(numbers[10]);
+	mapTree->erase(numbers[12]);
+	mapTree->erase(numbers[55]);
+	mapTree->erase(numbers[16]);
+	mapTree->erase(numbers[77]);
+	mapTree->erase(numbers[32]);
+	mapTree->insert(std::pair<int, int>(numbers[15], numbers[15]));
+	mapTree->insert(std::pair<int, int>(numbers[99], numbers[99]));
+	mapTree->insert(std::pair<int, int>(numbers[10], numbers[10]));
+	mapTree->insert(std::pair<int, int>(numbers[12], numbers[12]));
+	mapTree->insert(std::pair<int, int>(numbers[55], numbers[55]));
+	mapTree->insert(std::pair<int, int>(numbers[16], numbers[16]));
+	mapTree->insert(std::pair<int, int>(numbers[77], numbers[77]));
+	mapTree->insert(std::pair<int, int>(numbers[32], numbers[32]));
 	
 	std::map<int, int>::iterator it = mapTree->begin();
 	std::ofstream ofs1("test1");
 	for (it = mapTree->begin(); it != mapTree->end(); ++it)
+	{
     	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
+	}
     for(int i=0; i<100; i++)
 	{
 		tree->add(nodes[i]->value);
@@ -150,20 +166,23 @@ int main()
 	tree->remove(nodes[16]->value);
 	tree->remove(nodes[77]->value);
 	tree->remove(nodes[32]->value);
-	// tree->add(nodes[15]->value);
-	// tree->add(nodes[99]->value);
-	// tree->add(nodes[10]->value);
-	// tree->add(nodes[12]->value);
-	// tree->add(nodes[55]->value);
-	// tree->add(nodes[16]->value);
-	// tree->add(nodes[77]->value);
-	// tree->add(nodes[32]->value);
+	tree->add(nodes[15]->value);
+	tree->add(nodes[99]->value);
+	tree->add(nodes[10]->value);
+	tree->add(nodes[12]->value);
+	tree->add(nodes[55]->value);
+	tree->add(nodes[16]->value);
+	tree->add(nodes[77]->value);
+	tree->add(nodes[32]->value);
 	ofs1.close();
 	std::ofstream ofs("test2");
 	tree->inOrderHelper(tree->get_root(), ofs);
 	std::cout << std::endl;
 	ofs.close();
-
+	// std::cout << tree->get_size() << std::endl;
+	// std::cout << mapTree->size() << std::endl;
+	delete tree;
+	delete mapTree;
 }
 
 

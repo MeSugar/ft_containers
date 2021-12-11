@@ -1,4 +1,5 @@
-for i in {1..100}
+for i in {1..500}
 do
    ./Map_test
+   diff test1 test2
 done

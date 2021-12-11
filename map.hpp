@@ -4,8 +4,6 @@
 #include "iterator.hpp"
 #include "utility.hpp"
 #include "tree.hpp"
-// #include <functional>
-
 
 namespace ft
 {

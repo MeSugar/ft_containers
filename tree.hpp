@@ -7,33 +7,26 @@
 
 namespace ft
 {
-	template <class Key, class T>
+	template <class T>
 	class node
 	{
 		public:
-			typedef	Key										key_type;
-			typedef T										mapped_type;
-			typedef ft::pair<const key_type, mapped_type>	value_type;
+			typedef T										value_type;
 
 			value_type					value;
-			node<key_type, mapped_type>	*parent;
-			node<key_type, mapped_type>	*right;
-			node<key_type, mapped_type>	*left;	
-			bool						is_leftchild;
+			node<value_type>			*parent;
+			node<value_type>			*right;
+			node<value_type>			*left;	
 			bool						is_black;
 
 			// constructors & destructor
-			node() : value(NULL), parent(NULL), right(NULL), left(NULL),
-					is_leftchild(false), is_black(false) {}
-
-			node(key_type key, mapped_type val) : value(ft::pair<key_type, mapped_type>(key, val)), parent(NULL), right(NULL), left(NULL),
-									is_leftchild(false), is_black(false) {}
+			node() : value(NULL), parent(NULL), right(NULL), left(NULL), is_black(false) {}
 			
-			node(value_type& val = value_type()) : value(val), parent(NULL), right(NULL), left(NULL),
-									is_leftchild(false), is_black(false) {}
-
-			node(const node &other): value(other.value), parent(other.parent), right(other.right), left(other.left),
-								is_leftchild(other.is_leftchild), is_black(other.is_black) {}
+			node(const value_type &val) : value(val), parent(NULL), right(NULL),
+					left(NULL), is_black(false) {}
+			
+			node(const node &other): value(other.value), parent(other.parent), right(other.right),
+					left(other.left), is_black(other.is_black) {}
 
 			~node() {}
 
@@ -43,7 +36,6 @@ namespace ft
 				parent = other.parent;
 				right = other.right;
 				left = other.left;
-				is_leftchild = other.is_leftchild;
 				is_black = other.is_black;
 			}
 
@@ -51,14 +43,13 @@ namespace ft
 			// bool	operator<(const node &other) { return (value.first < other.value.first); }
 	};
 
-	template <class Key, class T, class Compare = ft::less<Key>, class node = node<Key, T>, class Alloc = std::allocator<node> >
+	template <class Key, class T, class Compare = ft::less<Key>, class node = node<T>, class Alloc = std::allocator<node> >
 	class RBTree
 	{
 		public:
 			// type aliases
 			typedef	Key										key_type;
-			typedef T										mapped_type;
-			typedef ft::pair<const key_type, mapped_type>	value_type;
+			typedef T										value_type;
 			typedef Compare									key_compare;
 			typedef	node									node_type;
 			typedef	Alloc									allocator_type;
@@ -66,7 +57,15 @@ namespace ft
 			typedef size_t									size_type;
 
 			// constructors & destructor
-			RBTree() : _root(NULL), _size(0) {}
+			RBTree()
+			{
+				_NIL = _allocator.allocate(1);
+				_allocator.construct(_NIL, value_type());
+				_NIL->is_black = true;
+				_NIL->parent = _NIL;
+				_root = _NIL;
+				_size = 0; 
+			}
 			~RBTree() {}
 
 			// methods
@@ -79,16 +78,10 @@ namespace ft
 				{
 					pointer new_node = _allocator.allocate(1);
 					_allocator.construct(new_node, val);
-					if (!_root)
-					{
-						_root = new_node;
-						_root->is_black = true;
-						_size++;
-						return ;
-					}
-					else
-						add(_root, new_node);
-					_size++;
+					new_node->parent = NULL;
+					new_node->right = _NIL;
+					new_node->left = _NIL;
+					add(new_node);
 				}
 				catch(const std::exception& e)
 				{
@@ -100,197 +93,48 @@ namespace ft
 			void	remove(value_type &val)
 			{
 				pointer ptr = contains(val);
-				if (ptr)
+				if (ptr != _NIL)
 					remove(ptr);
 			}
 
-			void	left_rotate(pointer ptr)
-			{
-				pointer	tmp = ptr->right;
-				ptr->right = tmp->left;
-				if (ptr->right)
-				{
-					ptr->right->parent = ptr;
-					ptr->right->is_leftchild = false;
-				}
-				if (!ptr->parent)
-				{
-					_root = tmp;
-					tmp->parent = NULL;
-				}
-				else
-				{
-					tmp->parent = ptr->parent;
-					if (ptr->is_leftchild)
-					{
-						tmp->is_leftchild = true;
-						tmp->parent->left = tmp;
-					}
-					else
-					{
-						tmp->is_leftchild = false;
-						tmp->parent->right = tmp;
-					}
-				}
-				ptr->parent = tmp;
-				ptr->is_leftchild = true;
-				tmp->left = ptr;
-			}
+			// size_type	height()
+			// {
+			// 	if (!_root)
+			// 		return 0;
+			// 	return (height(_root) - 1);
+			// }
 
-			void	right_rotate(pointer ptr)
-			{
-				pointer	tmp = ptr->left;
-				ptr->left = tmp->right;
-				if (ptr->left)
-				{
-					ptr->left->parent = ptr;
-					ptr->left->is_leftchild = true;
-				}
-				if (!ptr->parent)
-				{
-					_root = tmp;
-					tmp->parent = NULL;
-				}
-				else
-				{
-					tmp->parent = ptr->parent;
-					if (ptr->is_leftchild)
-					{
-						tmp->is_leftchild = true;
-						tmp->parent->left = tmp;
-					}
-					else
-					{
-						tmp->is_leftchild = false;
-						tmp->parent->right = tmp;
-					}
-				}
-				ptr->parent = tmp;
-				ptr->is_leftchild = false;
-				tmp->right = ptr;
-			}
-
-			void	left_right_rotate(pointer ptr)
-			{
-				left_rotate(ptr->left);
-				right_rotate(ptr);
-			}
-
-			void	right_left_rotate(pointer ptr)
-			{
-				right_rotate(ptr->right);
-				left_rotate(ptr);
-			}
-
-			void	rotate(pointer ptr)
-			{
-				if (ptr->is_leftchild)
-				{
-					if (ptr->parent->is_leftchild)
-					{
-						right_rotate(ptr->parent->parent);
-						ptr->is_black = false;
-						ptr->parent->is_black = true;
-						if (ptr->parent->right)
-							ptr->parent->right->is_black = false;
-						return ;
-					}
-					right_left_rotate(ptr->parent->parent);
-					ptr->is_black = true;
-					ptr->right->is_black = false;
-					ptr->left->is_black = false;
-					return ;
-				}
-				if (!ptr->parent->is_leftchild)
-				{
-					left_rotate(ptr->parent->parent);
-					ptr->is_black = false;
-					ptr->parent->is_black = true;
-					if (ptr->parent->left)
-						ptr->parent->left->is_black = false;
-					return ;
-				}
-				left_right_rotate(ptr->parent->parent);
-				ptr->is_black = true;
-				ptr->right->is_black = false;
-				ptr->left->is_black = false;
-			}
-
-			void	correct_tree(pointer ptr)
-			{
-				if (ptr->parent->is_leftchild) // aunt is node->parent->parent->right
-				{
-					if (!ptr->parent->parent->right || ptr->parent->parent->right->is_black)
-						return rotate(ptr);
-					// color flip
-					if (ptr->parent->parent->right) 
-						ptr->parent->parent->right->is_black = true;
-					ptr->parent->parent->is_black = false;
-					ptr->parent->is_black = true;
-					return ;
-				}
-				// aunt is node->parent->parent->left
-				if (ptr->parent->parent && (!ptr->parent->parent->left || ptr->parent->parent->left->is_black))
-					return rotate(ptr);
-				 // color flip
-				if (ptr->parent->parent->left)
-					ptr->parent->parent->left->is_black = true;
-				ptr->parent->parent->is_black = false;
-				ptr->parent->is_black = true;
-			}
-
-			void	add_fix_color(pointer ptr)
-			{
-				if (ptr == _root)
-				{
-					ptr->is_black = true;
-					black_nodes(_root);
-					return ;
-				}
-				if (ptr->parent->parent && !ptr->is_black && !ptr->parent->is_black)
-					correct_tree(ptr);
-				if (ptr->parent)
-					add_fix_color(ptr->parent);
-			}
-
-			size_type	height()
-			{
-				if (!_root)
-					return 0;
-				return (height(_root) - 1);
-			}
-
-			size_type	height(pointer ptr)
-			{
-				if (!ptr)
-					return 0;
-				size_type left_height = height(ptr->left) + 1;
-				size_type right_height = height(ptr->right) + 1;
-				if (left_height > right_height)
-					return left_height;
-				return right_height;
-			}
+			// size_type	height(pointer ptr)
+			// {
+			// 	if (ptr == _NIL)
+			// 		return 0;
+			// 	size_type left_height = height(ptr->left) + 1;
+			// 	size_type right_height = height(ptr->right) + 1;
+			// 	if (left_height > right_height)
+			// 		return left_height;
+			// 	return right_height;
+			// }
 
 			pointer		minimum(pointer ptr)
 			{
-				while (ptr->left)
+				while (ptr->left != _NIL)
 					ptr = ptr->left;
 				return ptr;
 			}
 
 			pointer		maximum(pointer ptr)
 			{
-				while (ptr->right)
+				while (ptr->right != _NIL)
 					ptr = ptr->right;
 				return ptr;
 			}
 
 			pointer		predecessor(pointer ptr)
 			{
-				if (ptr->left)
+				if (ptr->left != _NIL)
 					return (maximum(ptr->left));
 				pointer tmp = ptr->parent;
-				while (tmp && ptr == tmp->left)
+				while (tmp != _NIL && ptr == tmp->left)
 				{
 					ptr = tmp;
 					tmp = tmp->parent;
@@ -300,10 +144,10 @@ namespace ft
 
 			pointer		successor(pointer ptr)
 			{
-				if (ptr->right)
+				if (ptr->right != _NIL)
 					return (minimum(ptr->right));
 				pointer tmp = ptr->parent;
-				while (tmp && ptr == tmp->right)
+				while (tmp != _NIL && ptr == tmp->right)
 				{
 					ptr = tmp;
 					tmp = tmp->parent;
@@ -313,7 +157,7 @@ namespace ft
 
 			size_type	black_nodes(pointer ptr)
 			{
-				if (!ptr)
+				if (ptr == _NIL)
 					return 1;
 				size_type right_black_nodes = black_nodes(ptr->right);
 				size_type left_black_nodes = black_nodes(ptr->left);
@@ -321,24 +165,14 @@ namespace ft
 				{
 					std::cout << "error: tree contains wrong number of black nodes" << std::endl;
 				}
-				if (ptr->is_black)
+				if (ptr->is_black == true)
 					left_black_nodes++;
 				return left_black_nodes;
 			}
 
-			void preOrderHelper(pointer ptr) 
-			{
-				if (ptr)
-				{
-					std::cout << ptr->value.first << " ";
-					preOrderHelper(ptr->left);
-					preOrderHelper(ptr->right);
-				} 
-			}
-
 			void inOrderHelper(pointer ptr, std::ostream &ofs)
 			{				
-				if (ptr)
+				if (ptr != _NIL)
 				{
 					inOrderHelper(ptr->left, ofs);
 					ofs << ptr->value.first << " => " << ptr->value.second << " => " << ptr->is_black << '\n';
@@ -351,80 +185,199 @@ namespace ft
 		protected:
 			allocator_type		_allocator;
 			pointer				_root;
+			pointer				_NIL;
 			size_type			_size;
 			key_compare			_comp;
 
-			void	add(pointer parent, pointer new_node)
+			void	left_rotate(pointer ptr)
 			{
-				if (_comp(parent->value.first, new_node->value.first))
-				{
-					if (!parent->right)
-					{
-						parent->right = new_node;
-						new_node->parent = parent;
-						new_node->is_leftchild = false;
-						add_fix_color(new_node);
-					}
-					else
-						add(parent->right, new_node);
-				}
+				pointer	tmp = ptr->right;
+				ptr->right = tmp->left;
+				if (tmp->left != _NIL)
+					tmp->left->parent = ptr;
+				tmp->parent = ptr->parent;
+				if (ptr->parent == _NIL)
+					_root = tmp;
+				else if (ptr == ptr->parent->left)
+					ptr->parent->left = tmp;
 				else
-				{
-					if (!parent->left)
-					{
-						parent->left = new_node;
-						new_node->parent = parent;
-						new_node->is_leftchild = true;
-						add_fix_color(new_node);
-					}
-					else
-						add(parent->left, new_node);
-				}
+					ptr->parent->right = tmp;
+				tmp->left = ptr;
+				ptr->parent = tmp;
+			}
+
+			void	right_rotate(pointer ptr)
+			{
+				pointer	tmp = ptr->left;
+				ptr->left = tmp->right;
+				if (tmp->right != _NIL)
+					tmp->right->parent = ptr;
+				tmp->parent = ptr->parent;
+				if (ptr->parent == _NIL)
+					_root = tmp;
+				else if (ptr == ptr->parent->left)
+					ptr->parent->left = tmp;
+				else
+					ptr->parent->right = tmp;
+				tmp->right = ptr;
+				ptr->parent = tmp;
 			}
 
 			void	transplant(pointer ptr1, pointer ptr2)
 			{
-				if (!ptr1->parent)
+				if (ptr1->parent == _NIL)
 					_root = ptr2;
 				else if (ptr1 == ptr1->parent->left)
-				{
 					ptr1->parent->left = ptr2;
-					if (ptr2)
-						ptr2->is_leftchild = true;
+				else
+					ptr1->parent->right = ptr2;
+				ptr2->parent = ptr1->parent;
+			}
+
+			void	add(pointer ptr)
+			{
+				pointer	entry = _root;
+				pointer	new_parent = _NIL;
+				while (entry != _NIL)
+				{
+					new_parent = entry;
+					if (_comp(ptr->value.first, entry->value.first))
+						entry = entry->left;
+					else
+						entry = entry->right;
+				}
+				ptr->parent = new_parent;
+				if (ptr->parent == _NIL)
+					_root = ptr;
+				else if (_comp(ptr->value.first, new_parent->value.first))
+					new_parent->left = ptr;
+				else
+					new_parent->right = ptr;
+				ptr->left = _NIL;
+				ptr->right = _NIL;
+				_size++;
+				add_color_fix(ptr);
+			}
+
+			void	add_color_fix(pointer ptr)
+			{
+				pointer	aunt = _NIL;
+				while (ptr->parent->is_black == false)
+				{
+					if (ptr->parent == ptr->parent->parent->left)	//ptr is in the left subtree
+					{
+						aunt = ptr->parent->parent->right;
+						if (aunt->is_black == false)	// aunt is red – color_flip
+						{
+							ptr->parent->is_black = true;
+							aunt->is_black = true;
+							ptr->parent->parent->is_black = false;
+							ptr = ptr->parent->parent;
+						}
+						else	// aunt is black – rotate
+						{
+							if (ptr == ptr->parent->right)
+							{
+								ptr = ptr->parent;
+								left_rotate(ptr);
+							}
+							ptr->parent->is_black = true;
+							ptr->parent->parent->is_black = false;
+							right_rotate(ptr->parent->parent);
+						}
+					}
+					else // ptr is in the right subtree
+					{
+						aunt = ptr->parent->parent->left;
+						if (aunt->is_black == false)	// aunt is red – color_flip
+						{
+							ptr->parent->is_black = true;
+							aunt->is_black = true;
+							ptr->parent->parent->is_black = false;
+							ptr = ptr->parent->parent;
+						}
+						else	// aunt is black – rotate
+						{
+							if (ptr == ptr->parent->left)
+							{
+								ptr = ptr->parent;
+								right_rotate(ptr);
+							}
+							ptr->parent->is_black = true;
+							ptr->parent->parent->is_black = false;
+							left_rotate(ptr->parent->parent);
+						}
+					}
+					if (ptr == _root)
+						break ;
+				}
+				_root->is_black = true;
+				black_nodes(_root);
+			}
+
+			void	remove(pointer ptr)
+			{
+				pointer	min, tmp;
+				min = ptr;
+				tmp = NULL; 
+				bool	min_original_color = min->is_black;
+				if (ptr->left == _NIL)
+				{
+					tmp = ptr->right;
+					transplant(ptr, ptr->right);
+				}
+				else if (ptr->right == _NIL)
+				{
+					tmp = ptr->left;
+					transplant(ptr, ptr->left);
 				}
 				else
 				{
-					ptr1->parent->right = ptr2;
-					if (ptr2)
-						ptr2->is_leftchild = false;
+					min = minimum(ptr->right);
+					min_original_color = min->is_black;
+					tmp = min->right;
+					if (min->parent == ptr)
+						tmp->parent = min;
+					else
+					{
+						transplant(min, min->right);
+						min->right = ptr->right;
+						min->right->parent = min;
+					}
+					transplant(ptr, min);
+					min->left = ptr->left;
+					min->left->parent = min;
+					min->is_black = ptr->is_black;
 				}
-				if (ptr2)
-					ptr2->parent = ptr1->parent;
+				if (min_original_color == true)
+					remove_color_fix(tmp);
+				destroy_n_dealloc(ptr);
+				_size--;
 			}
 
-			void	remove_fix_color(pointer ptr)
+			void	remove_color_fix(pointer ptr)
 			{
-				pointer	tmp = NULL;
-				while (ptr && ptr != _root && ptr->is_black)
+				pointer	tmp = _NIL;
+				while (ptr != _root && ptr->is_black == true)
 				{
 					if (ptr == ptr->parent->left)
 					{
 						tmp = ptr->parent->right;
-						if (!tmp->is_black)
+						if (tmp->is_black == false)
 						{
 							tmp->is_black = true;
 							ptr->parent->is_black = false;
 							left_rotate(ptr->parent);
 							tmp = ptr->parent->right;
 						}
-						if (tmp->left->is_black && tmp->right->is_black)
+						if (tmp->left->is_black == true && tmp->right->is_black == true)
 						{
 							tmp->is_black = false;
 							ptr = ptr->parent;
 						}
 						else
 						{ 
-							if (tmp->right->is_black)
+							if (tmp->right->is_black == true)
 							{
 								tmp->left->is_black = true;
 								tmp->is_black = false;
@@ -441,14 +394,14 @@ namespace ft
 					else
 					{
 						tmp = ptr->parent->left;
-						if (!tmp->is_black)
+						if (tmp->is_black == false)
 						{
 							tmp->is_black = true;
 							ptr->parent->is_black = false;
 							right_rotate(ptr->parent);
 							tmp = ptr->parent->left;
 						}
-						if (tmp->right->is_black && tmp->right->is_black)
+						if (tmp->left->is_black == true && tmp->right->is_black == true)
 						{
 							tmp->is_black = false;
 							ptr = ptr->parent;
@@ -470,55 +423,14 @@ namespace ft
 						}
 					}
 				}
-				if (ptr)
-					ptr->is_black = true;
+				ptr->is_black = true;
+				black_nodes(_root);
 			}
 
-			void	remove(pointer ptr)
-			{
-				pointer	min, tmp;
-				min = ptr;
-				tmp = NULL; 
-				bool	min_original_color = min->is_black;
-				if (!ptr->left)
-				{
-					tmp = ptr->right;
-					transplant(ptr, ptr->right);
-				}
-				else if (!ptr->right)
-				{
-					tmp = ptr->left;
-					transplant(ptr, ptr->left);
-				}
-				else
-				{
-					min = minimum(ptr->right);
-					min_original_color = min->is_black;
-					tmp = min->right;
-					if (min->parent == ptr && tmp)
-						tmp->parent = min;
-					else
-					{
-						transplant(min, min->right);
-						min->right = ptr->right;
-						if (min->right)
-							min->right->parent = min;
-					}
-					transplant(ptr, min);
-					min->left = ptr->left;
-					min->left->parent = min;
-					min->is_black = ptr->is_black;
-				}
-				if (min_original_color == true)
-					remove_fix_color(tmp);
-				destroy_n_dealloc(ptr);
-				_size--;
-			}
-			
 			pointer	contains(value_type &val, pointer ptr)
 			{
-				if (!ptr)
-					return NULL;
+				if (ptr == _NIL)
+					return _NIL;
 				if (ptr->value.first == val.first)
 					return ptr;
 				if (_comp(val.first, ptr->value.first))
