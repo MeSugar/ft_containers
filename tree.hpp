@@ -11,12 +11,13 @@ namespace ft
 	class node
 	{
 		public:
-			typedef T										value_type;
+			typedef T					value_type;
+			typedef	node<value_type>*	pointer;
 
 			value_type					value;
-			node<value_type>			*parent;
-			node<value_type>			*right;
-			node<value_type>			*left;	
+			pointer						parent;
+			pointer						right;
+			pointer						left;	
 			bool						is_black;
 
 			// constructors & destructor
@@ -257,6 +258,7 @@ namespace ft
 				ptr->right = _NIL;
 				_size++;
 				add_color_fix(ptr);
+				_NIL->parent = maximum(_root);
 			}
 
 			void	add_color_fix(pointer ptr)
@@ -353,6 +355,7 @@ namespace ft
 					remove_color_fix(tmp);
 				destroy_n_dealloc(ptr);
 				_size--;
+				_NIL->parent = maximum(_root);
 			}
 
 			void	remove_color_fix(pointer ptr)

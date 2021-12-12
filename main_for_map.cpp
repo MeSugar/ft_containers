@@ -125,11 +125,11 @@ int main()
 	
 	for(int i=0; i<100; i++)
 	{
-		nodes[i] = new ft::node<ft::pair<int, int> >(ft::pair<int, int>(numbers[i], numbers[i]));
+		nodes[i] = new ft::node<ft::pair<int, int> >(ft::pair<int, int>(numbers[i], numbers[i] * 10));
 	}
 	for (int i = 0; i < 100; i++)
 	{
-		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i]));
+		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i] * 10));
 	}
 	mapTree->erase(numbers[15]);
 	mapTree->erase(numbers[99]);
@@ -139,14 +139,14 @@ int main()
 	mapTree->erase(numbers[16]);
 	mapTree->erase(numbers[77]);
 	mapTree->erase(numbers[32]);
-	mapTree->insert(std::pair<int, int>(numbers[15], numbers[15]));
-	mapTree->insert(std::pair<int, int>(numbers[99], numbers[99]));
-	mapTree->insert(std::pair<int, int>(numbers[10], numbers[10]));
-	mapTree->insert(std::pair<int, int>(numbers[12], numbers[12]));
-	mapTree->insert(std::pair<int, int>(numbers[55], numbers[55]));
-	mapTree->insert(std::pair<int, int>(numbers[16], numbers[16]));
-	mapTree->insert(std::pair<int, int>(numbers[77], numbers[77]));
-	mapTree->insert(std::pair<int, int>(numbers[32], numbers[32]));
+	mapTree->insert(std::pair<int, int>(numbers[15], numbers[15] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[99], numbers[99] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[10], numbers[10] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[12], numbers[12] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[55], numbers[55] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[16], numbers[16] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[77], numbers[77] * 10));
+	mapTree->insert(std::pair<int, int>(numbers[32], numbers[32] * 10));
 	
 	std::map<int, int>::iterator it = mapTree->begin();
 	std::ofstream ofs1("test1");
@@ -154,6 +154,7 @@ int main()
 	{
     	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
 	}
+	it--;
     for(int i=0; i<100; i++)
 	{
 		tree->add(nodes[i]->value);
