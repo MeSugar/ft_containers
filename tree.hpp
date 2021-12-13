@@ -13,6 +13,7 @@ namespace ft
 		public:
 			typedef T					value_type;
 			typedef	node<value_type>*	pointer;
+			typedef	node<value_type>&	reference;
 
 			value_type					value;
 			pointer						parent;
@@ -44,7 +45,7 @@ namespace ft
 			// bool	operator<(const node &other) { return (value.first < other.value.first); }
 	};
 
-	template <class Key, class T, class Compare = ft::less<Key>, class node = node<T>, class Alloc = std::allocator<node> >
+	template <class Key, class T, class Compare = ft::less<Key>, class node_t = node<T>, class Alloc = std::allocator<node_t> >
 	class RBTree
 	{
 		public:
@@ -52,10 +53,11 @@ namespace ft
 			typedef	Key										key_type;
 			typedef T										value_type;
 			typedef Compare									key_compare;
-			typedef	node									node_type;
+			typedef	node_t									node_type;
 			typedef	Alloc									allocator_type;
 			typedef typename allocator_type::pointer		pointer;
 			typedef size_t									size_type;
+			typedef ft::RBTree_iterator<node_type>			iterator;
 
 			// constructors & destructor
 			RBTree()
@@ -64,16 +66,19 @@ namespace ft
 				_allocator.construct(_NIL, value_type());
 				_NIL->is_black = true;
 				_NIL->parent = _NIL;
+				_NIL->right = _NIL;
+				_NIL->left = _NIL;
 				_root = _NIL;
 				_size = 0; 
 			}
 			~RBTree() {}
 
 			// methods
-			pointer		get_root() { return _root; }
-			size_type	get_size() { return _size; }
+			pointer		get_root() const { return _root; }
+			pointer		get_nil() const { return _NIL; }
+			size_type	get_size() const { return _size; }
 
-			void	add(value_type &val)
+			void	add(const value_type &val)
 			{
 				try
 				{
@@ -143,7 +148,7 @@ namespace ft
 				return tmp;
 			}
 
-			pointer		successor(pointer ptr)
+			pointer		successor(const pointer ptr)
 			{
 				if (ptr->right != _NIL)
 					return (minimum(ptr->right));
@@ -181,7 +186,7 @@ namespace ft
 				} 
 			}
 
-			pointer	contains(value_type &val) { return contains(val, _root); }
+			pointer	contains(const value_type &val) { return contains(val, _root); }
 
 		protected:
 			allocator_type		_allocator;
@@ -430,7 +435,7 @@ namespace ft
 				black_nodes(_root);
 			}
 
-			pointer	contains(value_type &val, pointer ptr)
+			pointer	contains(const value_type &val, pointer ptr)
 			{
 				if (ptr == _NIL)
 					return _NIL;

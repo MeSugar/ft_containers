@@ -105,85 +105,153 @@
 
 
 // tree test
-int main()
-{
-	std::vector<int> numbers;
+// int main()
+// {
+// 	std::vector<int> numbers;
 
-    for(int i=0; i<100; i++)       // add 0-99 to the vector
-	{
-        numbers.push_back(i);
-	}
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
-    // for(int i=0; i<100; i++)        // print the first 40 randomly sorted numbers
-	// {
-    //     std::cout << numbers[i] << std::endl;
+//     for(int i=0; i<100; i++)       // add 0-99 to the vector
+// 	{
+//         numbers.push_back(i);
+// 	}
+//     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//     std::shuffle(numbers.begin(), numbers.end(), std::default_random_engine(seed));
+//     // for(int i=0; i<100; i++)        // print the first 40 randomly sorted numbers
+// 	// {
+//     //     std::cout << numbers[i] << std::endl;
+// 	// }
+// 	std::map<int, int> *mapTree = new std::map<int, int>;
+// 	ft::RBTree<int, ft::pair<int, int> > *tree = new ft::RBTree<int, ft::pair<int, int> >;
+// 	ft::node<ft::pair<int, int> > *nodes[100];
+	
+// 	for(int i=0; i<100; i++)
+// 	{
+// 		nodes[i] = new ft::node<ft::pair<int, int> >(ft::pair<int, int>(numbers[i], numbers[i] * 10));
+// 	}
+// 	for (int i = 0; i < 100; i++)
+// 	{
+// 		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i] * 10));
+// 	}
+// 	mapTree->erase(numbers[15]);
+// 	mapTree->erase(numbers[99]);
+// 	mapTree->erase(numbers[10]);
+// 	mapTree->erase(numbers[12]);
+// 	mapTree->erase(numbers[55]);
+// 	mapTree->erase(numbers[16]);
+// 	mapTree->erase(numbers[77]);
+// 	mapTree->erase(numbers[32]);
+// 	// std::pair<std::map<int, int>::iterator, int> ppair = mapTree->insert(std::pair<int, int>(numbers[15], numbers[15] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[15], numbers[15] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[99], numbers[99] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[10], numbers[10] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[12], numbers[12] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[55], numbers[55] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[16], numbers[16] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[77], numbers[77] * 10));
+// 	mapTree->insert(std::pair<int, int>(numbers[32], numbers[32] * 10));
+	
+// 	std::map<int, int>::iterator it = mapTree->begin();
+// 	std::ofstream ofs1("test1");
+// 	for (it = mapTree->begin(); it != mapTree->end(); ++it)
+// 	{
+//     	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
+// 	}
+// 	// it--;
+// 	// std::cout << it._M_node->_M_color << ' ' << std::endl;
+// 	// std::cout << (*it).first << ' ' << std::endl;
+
+//     for(int i=0; i<100; i++)
+// 	{
+// 		tree->add(nodes[i]->value);
+// 	}
+// 	tree->remove(nodes[15]->value);
+// 	tree->remove(nodes[99]->value);
+// 	tree->remove(nodes[10]->value);
+// 	tree->remove(nodes[12]->value);
+// 	tree->remove(nodes[55]->value);
+// 	tree->remove(nodes[16]->value);
+// 	tree->remove(nodes[77]->value);
+// 	tree->remove(nodes[32]->value);
+// 	tree->add(nodes[15]->value);
+// 	tree->add(nodes[99]->value);
+// 	tree->add(nodes[10]->value);
+// 	tree->add(nodes[12]->value);
+// 	tree->add(nodes[55]->value);
+// 	tree->add(nodes[16]->value);
+// 	tree->add(nodes[77]->value);
+// 	tree->add(nodes[32]->value);
+// 	ofs1.close();
+// 	std::ofstream ofs("test2");
+// 	tree->inOrderHelper(tree->get_root(), ofs);
+// 	std::cout << std::endl;
+// 	ofs.close();
+
+// 	// std::cout << tree->get_size() << std::endl;
+// 	// std::cout << mapTree->size() << std::endl;
+	// ft::map<int, int> mymap;
+// 	// mymap.insert(nodes[15]->value);
+// 	// mymap.insert(nodes[15]->value);
+// 	// ft::map<int, int>::iterator myit;
+// 	// myit = mymap.begin();
+// 	// std::cout << myit->first << std::endl;
+// 	// ft::map<int, int>::iterator it;
+
+// 	// std::cout << ppair.first->first << ' ' << ppair.first->second << ' ' << ppair.second << std::endl;
+// 	delete tree;
+// 	delete mapTree;
+// }
+
+
+
+//iterator tests
+
+int main ()
+{
+	ft::map<char,int> mymap;
+
+	// mymap.insert(ft::pair<char, int>('d', 400));
+	// mymap.insert(ft::pair<char, int>('a', 100));
+	// mymap.insert(ft::pair<char, int>('i', 800));
+	// mymap.insert(ft::pair<char, int>('h', 900));
+	// mymap.insert(ft::pair<char, int>('b', 200));
+	// mymap.insert(ft::pair<char, int>('f', 600));
+	// mymap.insert(ft::pair<char, int>('c', 300));
+	// mymap.insert(ft::pair<char, int>('j', 1100));
+	// mymap.insert(ft::pair<char, int>('e', 500));
+	// ft::pair<ft::map<char,int>::iterator, bool> ret;
+	// ret = ft::make_pair(mymap.begin(), true);
+
+
+	//shitty pair
+	std::map<char,int> theirmap;
+
+	theirmap.insert ( std::pair<char,int>('a',100) );
+	theirmap.insert ( std::pair<char,int>('z',200) );
+
+	std::pair<std::map<char,int>::iterator,bool> ret;
+	ret = theirmap.insert ( std::pair<char,int>('z',500) );
+  	if (ret.second==false) {
+    	std::cout << "element 'z' already existed";
+    	std::cout << " with a value of " << ret.first->second << '\n';
+  }
+	//shitty pair
+	ft::pair<ft::map<char, int>::iterator, bool> rett;
+	rett = ft::make_pair(mymap.begin(), true);
+
+	// ft::pair<ft::map<char,int>::iterator, bool> ret = ft::make_pair(mymap.begin(), false);
+	// std::cout << ret.first->first << ' ' << ret.first->second << std::endl;
+	// std::cout << ret.first->first << ' ' << ret.first->second << std::endl;
+	
+	// if (ret.second==true) {
+    // std::cout << "element 'z' didn't exist";
+    // std::cout << ret.first->first << " with a value of " << ret.first->second << '\n';
 	// }
-	std::map<int, int> *mapTree = new std::map<int, int>;
-	ft::RBTree<int, ft::pair<int, int> > *tree = new ft::RBTree<int, ft::pair<int, int> >;
-	ft::node<ft::pair<int, int> > *nodes[100];
-	
-	for(int i=0; i<100; i++)
-	{
-		nodes[i] = new ft::node<ft::pair<int, int> >(ft::pair<int, int>(numbers[i], numbers[i] * 10));
-	}
-	for (int i = 0; i < 100; i++)
-	{
-		mapTree->insert(std::pair<int, int>(numbers[i], numbers[i] * 10));
-	}
-	mapTree->erase(numbers[15]);
-	mapTree->erase(numbers[99]);
-	mapTree->erase(numbers[10]);
-	mapTree->erase(numbers[12]);
-	mapTree->erase(numbers[55]);
-	mapTree->erase(numbers[16]);
-	mapTree->erase(numbers[77]);
-	mapTree->erase(numbers[32]);
-	mapTree->insert(std::pair<int, int>(numbers[15], numbers[15] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[99], numbers[99] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[10], numbers[10] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[12], numbers[12] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[55], numbers[55] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[16], numbers[16] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[77], numbers[77] * 10));
-	mapTree->insert(std::pair<int, int>(numbers[32], numbers[32] * 10));
-	
-	std::map<int, int>::iterator it = mapTree->begin();
-	std::ofstream ofs1("test1");
-	for (it = mapTree->begin(); it != mapTree->end(); ++it)
-	{
-    	ofs1 << it->first << " => " << it->second << " => " << it._M_node->_M_color << '\n';
-	}
-	it--;
-    for(int i=0; i<100; i++)
-	{
-		tree->add(nodes[i]->value);
-	}
-	tree->remove(nodes[15]->value);
-	tree->remove(nodes[99]->value);
-	tree->remove(nodes[10]->value);
-	tree->remove(nodes[12]->value);
-	tree->remove(nodes[55]->value);
-	tree->remove(nodes[16]->value);
-	tree->remove(nodes[77]->value);
-	tree->remove(nodes[32]->value);
-	tree->add(nodes[15]->value);
-	tree->add(nodes[99]->value);
-	tree->add(nodes[10]->value);
-	tree->add(nodes[12]->value);
-	tree->add(nodes[55]->value);
-	tree->add(nodes[16]->value);
-	tree->add(nodes[77]->value);
-	tree->add(nodes[32]->value);
-	ofs1.close();
-	std::ofstream ofs("test2");
-	tree->inOrderHelper(tree->get_root(), ofs);
-	std::cout << std::endl;
-	ofs.close();
-	// std::cout << tree->get_size() << std::endl;
-	// std::cout << mapTree->size() << std::endl;
-	delete tree;
-	delete mapTree;
+
+
+	// show content:
+	// for(ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+	// 	std::cout << it->first << " => " << it->second << '\n';
+
+	return 0;
 }
 
 

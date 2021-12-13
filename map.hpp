@@ -7,7 +7,7 @@
 
 namespace ft
 {
-	template <class Key, class T, class Compare = less<Key>, class Alloc = std::allocator<pair<const Key,T> > >
+	template <class Key, class T, class Compare = less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
 	class map
 	{
 		public:
@@ -28,23 +28,75 @@ namespace ft
 					bool operator() (const value_type& x, const value_type& y) const
 					{ return comp(x.first, y.first); }
 			};
-			typedef Alloc													allocator_type;
-			typedef typename allocator_type::reference						reference;
-			typedef typename allocator_type::const_reference				const_reference;
-			typedef typename allocator_type::pointer						pointer;
-			typedef typename allocator_type::const_pointer					const_pointer;
-			typedef typename ft::random_access_iterator<value_type>			iterator;
-			typedef typename ft::random_access_iterator<const value_type>	const_iterator;
-			typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-			typedef typename ft::reverse_iterator<iterator>					const_reverse_iterator;
-			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; 
-			typedef size_t													size_type;
+			typedef Alloc															allocator_type;
+			typedef typename allocator_type::reference								reference;
+			typedef typename allocator_type::const_reference						const_reference;
+			typedef typename allocator_type::pointer								pointer;
+			typedef typename allocator_type::const_pointer							const_pointer;
+			// typedef typename ft::RBTree_iterator<typename ft::RBTree<key_type, value_type>::node_type >	iterator;
+			typedef typename ft::RBTree<key_type, value_type>::iterator 			iterator;
+			// typedef typename ft::RBTree_iterator<const value_type>					const_iterator;
+			typedef typename ft::reverse_iterator<iterator>							reverse_iterator;
+			// typedef typename ft::reverse_iterator<const iterator>					const_reverse_iterator;
+			typedef typename ft::iterator_traits<iterator>::difference_type			difference_type; 
+			typedef size_t															size_type;
+
+			// constructors & destructor
+			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: _allocator(alloc), _comp(comp), _tree() {}
+
+			// template <class InputIterator>
+			// map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
+			// 		const allocator_type& alloc = allocator_type(),
+			// 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+			// : _allocator(alloc), _comp(comp), _tree()
+			// {
+			// 	if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::bidirectional_iterator_tag))
+			// 	{
+			// 		try {
+			// 			insert(first, last); }
+			// 		catch (const std::exception& e) {
+			// 			throw ; }
+			// 	}
+			// 	else
+			// 	{
+			// 		std::cout << "Error : invalid input iterator" << std:: endl;
+			// 		throw ;
+			// 	}
+			// }
+
+			// map(const map& x) : _allocator(x._allocator), _comp(x._comp), _tree() { insert(x.begin(), x.end()); }
+
+			// iterators
+			iterator		begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
+			iterator		end() { return (iterator(_tree.get_nil(), _tree.get_nil())); }
+			
+
+			// modifiers
+			ft::pair<iterator, bool>	insert(const value_type& val)
+			{
+				iterator it(_tree.contains(val), _tree.get_nil());
+				if (_tree.contains(val) == _tree.get_nil())
+				{
+					_tree.add(val);
+					// ft::pair<iterator, bool> pair = ft::make_pair(it, true);
+					// return (ft::pair<iterator, bool>(it, true));
+				}
+				// else
+				// {
+					// std::cout << _tree.contains(val.first) << std::endl;
+					// return ft::make_pair(iterator(_tree.contains(val.first), _tree.get_nil()), true);
+				// }
+			}
+			
 
 			// observers
 			key_compare		key_comp() const { return (key_compare()); }
 			value_compare	value_comp() const { return (value_compare(key_compare())); }
 		protected:
-			allocator_type _allocator;
+			allocator_type					_allocator;
+			key_compare						_comp;
+			RBTree<key_type, value_type>	_tree;
 
 
 	};

@@ -20,7 +20,7 @@ namespace ft
 			typedef typename ft::random_access_iterator<value_type>			iterator;
 			typedef typename ft::random_access_iterator<const value_type>	const_iterator;
 			typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-			typedef typename ft::reverse_iterator<iterator>					const_reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; 
 			typedef size_t													size_type;
 		
@@ -65,7 +65,7 @@ namespace ft
 							_last++;
 						}
 					}
-					catch(const std::exception& e) {
+					catch (const std::exception& e) {
 						throw ; }
 				}
 				else
@@ -89,7 +89,7 @@ namespace ft
 							_last++;
 						}
 					}
-					catch(const std::exception& e) {
+					catch (const std::exception& e) {
 						throw ; }
 			}
 			
@@ -196,7 +196,7 @@ namespace ft
 						else
 							destroy(_first, _first + n);
 					}
-					catch(const std::exception& e) {
+					catch (const std::exception& e) {
 						throw ; }
 					_last = _first;
 					for (unsigned int i = 0; i < n; i++)

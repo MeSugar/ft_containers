@@ -154,15 +154,18 @@ namespace ft
 	{
 		public:
 			// aliases
-			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type		value_type;;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type		value_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type	difference_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer			pointer;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename T::value_type														data_value_type;
+			typedef data_value_type*															data_pointer;
+			typedef data_value_type&															data_reference;
 
 			// constructors && destructor
 			RBTree_iterator() {}
-			RBTree_iterator(pointer x) : ptr(x) {}
+			RBTree_iterator(pointer x, pointer nil) : ptr(x), NIL(nil) {}
 			RBTree_iterator(const RBTree_iterator &other) : ptr(other.ptr) {}
 			~RBTree_iterator() {}
 			
@@ -174,13 +177,14 @@ namespace ft
 			//  	return (*this);
 			//  }
 			
-			reference			operator*(void) const { return ptr->value; }
-			pointer				operator->() const { return &ptr->value; }
-			// reference				operator[](difference_type n) { return (*(ptr + n)); }
-			
+			data_reference		operator*(void) const { return ptr->value; }
+			data_pointer		operator->() const { return &ptr->value; }
+			bool				operator==(const RBTree_iterator &other) { return (ptr == other.ptr); }
+			bool				operator!=(const RBTree_iterator &other) { return (ptr != other.ptr); }
+
 			RBTree_iterator&	operator++(void)
 			{
-				if (ptr->right != ptr->NIL) 
+				if (ptr->right != NIL) 
 				{
 					ptr = ptr->right;
 					while (ptr->left != NIL)
@@ -189,7 +193,7 @@ namespace ft
 				else 
 				{
 					pointer tmp = ptr->parent;
-					while (ptr == tmp->right) 
+					while (ptr == tmp->right)
 					{
 						ptr = tmp;
 						tmp = tmp->parent;
@@ -200,60 +204,43 @@ namespace ft
 				return (*this);
 			}
 
-			// bidirectional_iterator	operator++(int)
-			// {
-			// 	bidirectional_iterator tmp = *this;
-			// 	ptr++;
-			// 	return (tmp);
-			// }
+			RBTree_iterator		operator++(int)
+			{
+				RBTree_iterator tmp = *this;
+				operator++();
+				return (tmp);
+			}
 
-			// bidirectional_iterator&	operator--(void)
-			// {
-			// 	ptr--;
-			// 	return (*this);
-			// }
+			RBTree_iterator&	operator--(void)
+			{
+				if (ptr->is_black == false && ptr->parent->parent == ptr)
+					ptr = ptr->right;
+				else if (ptr->left != NIL)
+				{
+					pointer tmp = ptr->left;
+					while (tmp->right != NIL)
+					tmp = tmp->right;
+					ptr = tmp;
+				}
+				else
+				{
+					pointer tmp = ptr->parent;
+					while (ptr == tmp->left)
+					{
+						ptr = tmp;
+						tmp = tmp->parent;
+					}
+					ptr = tmp;
+				}
+				return (*this);
+			}
 
-			// bidirectional_iterator	operator--(int)
-			// {
-			// 	bidirectional_iterator tmp = *this;
-			// 	ptr--;
-			// 	return (tmp);
-			// }
-
-			// bidirectional_iterator	operator+(difference_type n) const
-			// {
-			// 	bidirectional_iterator tmp(ptr + n);
-			// 	return tmp;
-			// }
-
-			// bidirectional_iterator	operator-(difference_type n) const
-			// {
-			// 	bidirectional_iterator tmp(ptr - n);
-			// 	return tmp;
-			// }
-
-			// difference_type			operator-(const bidirectional_iterator other) { return (ptr - other.ptr); }
-
-			// bidirectional_iterator	&operator+=(difference_type n)
-			// {
-			// 	ptr += n;
-			// 	return (*this);
-			// }
-
-			// bidirectional_iterator	&operator-=(difference_type n)
-			// {
-			// 	ptr -= n;
-			// 	return (*this);
-			// }
-
-			// pointer					operator->() { return &(operator*()); }
-			// bool					operator!=(random_access_iterator const &other) const { return (!(ptr == other.ptr)); }
-			// bool					operator==(random_access_iterator const &other) const { return (ptr == other.ptr); }
-			// bool					operator>(random_access_iterator const &other) const { return (ptr > other.ptr); }
-			// bool					operator<(random_access_iterator const &other) const { return (ptr < other.ptr); }
-			// bool					operator>=(random_access_iterator const &other) const { return (ptr >= other.ptr); }
-			// bool					operator<=(random_access_iterator const &other) const { return (ptr <= other.ptr); }
-			// pointer					base() const { return (ptr); }
+			RBTree_iterator	operator--(int)
+			{
+				RBTree_iterator tmp = *this;
+				operator--();
+				return (tmp);
+			}
 
 		protected:
 			pointer ptr;
