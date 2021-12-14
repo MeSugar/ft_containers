@@ -1,8 +1,8 @@
 NAME		=	Map_test
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 
-CC			=	g++
+CC			=	clang++
 
 INCLUDES	=	utility.hpp iterator.hpp tree.hpp vector.hpp map.hpp
 

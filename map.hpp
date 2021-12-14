@@ -70,29 +70,56 @@ namespace ft
 			// iterators
 			iterator		begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
 			iterator		end() { return (iterator(_tree.get_nil(), _tree.get_nil())); }
-			
+
+			// capacity
+			size_type size() const { return _tree.get_size(); }
 
 			// modifiers
-			ft::pair<iterator, bool>	insert(const value_type& val)
+			pair<iterator, bool>	insert(const value_type& val)
 			{
-				iterator it(_tree.contains(val), _tree.get_nil());
-				if (_tree.contains(val) == _tree.get_nil())
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(val);
+				if (ptr == _tree.get_nil())
 				{
 					_tree.add(val);
-					// ft::pair<iterator, bool> pair = ft::make_pair(it, true);
-					// return (ft::pair<iterator, bool>(it, true));
+					return ft::make_pair(iterator(ptr, _tree.get_nil()), true);
 				}
-				// else
-				// {
-					// std::cout << _tree.contains(val.first) << std::endl;
-					// return ft::make_pair(iterator(_tree.contains(val.first), _tree.get_nil()), true);
-				// }
+				return ft::make_pair(iterator(ptr, _tree.get_nil()), false);
+			}
+
+			iterator				insert(iterator position, const value_type& val)
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(position.get_value_pointer(), val);
+				if (ptr != _tree.get_nil())
+					return iterator(ptr, _tree.get_nil());
+				_tree.add(val);
+				return iterator(ptr, _tree.get_nil());
+			}
+
+			template <class InputIterator>
+			void insert(InputIterator first, InputIterator last)
+			{
+				while (first != last)
+					insert(*first++);
 			}
 			
 
 			// observers
 			key_compare		key_comp() const { return (key_compare()); }
 			value_compare	value_comp() const { return (value_compare(key_compare())); }
+
+			// operations
+			iterator find(const key_type& k)
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
+				if (ptr != _tree.get_nil())
+					return iterator(ptr, _tree.get_nil());
+				return end();
+			}
+ 
+
+
+
+
 		protected:
 			allocator_type					_allocator;
 			key_compare						_comp;

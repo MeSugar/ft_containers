@@ -187,6 +187,8 @@ namespace ft
 			}
 
 			pointer	contains(const value_type &val) { return contains(val, _root); }
+			pointer	contains(const key_type &key) { return contains(key, _root); }
+			pointer	contains(pointer position, const value_type &val) { return contains(val, position); }
 
 		protected:
 			allocator_type		_allocator;
@@ -444,6 +446,17 @@ namespace ft
 				if (_comp(val.first, ptr->value.first))
 					return contains(val, ptr->left);
 				return contains(val, ptr->right);
+			}
+
+			pointer	contains(const key_type &key, pointer ptr)
+			{
+				if (ptr == _NIL)
+					return _NIL;
+				if (ptr->value.first == key)
+					return ptr;
+				if (_comp(key, ptr->value.first))
+					return contains(key, ptr->left);
+				return contains(key, ptr->right);
 			}
 
 			void	destroy_n_dealloc(pointer ptr)

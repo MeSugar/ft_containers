@@ -169,13 +169,16 @@ namespace ft
 			RBTree_iterator(const RBTree_iterator &other) : ptr(other.ptr) {}
 			~RBTree_iterator() {}
 			
-			// overloads
 
-			//  RBTree_iterator &operator=(const RBTree_iterator& other)
-			//  {
-			//  	ptr = other.ptr;
-			//  	return (*this);
-			//  }
+			pointer	get_value_pointer() { return ptr; }
+			
+			// overloads
+			RBTree_iterator &operator=(const RBTree_iterator& other)
+			{
+				ptr = other.ptr;
+				NIL = other.NIL;
+				return (*this);
+			}
 			
 			data_reference		operator*(void) const { return ptr->value; }
 			data_pointer		operator->() const { return &ptr->value; }

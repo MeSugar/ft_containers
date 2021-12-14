@@ -1,10 +1,10 @@
 #include "map.hpp"
 // #include "vector.hpp"
 #include <map>
-#include <algorithm>
-#include <chrono>
-#include <iostream>
-#include <random>
+// #include <algorithm>
+// #include <chrono>
+// #include <iostream>
+// #include <random>
 #include <vector>
 
 
@@ -202,11 +202,9 @@
 
 
 
-//iterator tests
-
+//insert tests
 int main ()
 {
-	ft::map<char,int> mymap;
 
 	// mymap.insert(ft::pair<char, int>('d', 400));
 	// mymap.insert(ft::pair<char, int>('a', 100));
@@ -220,36 +218,37 @@ int main ()
 	// ft::pair<ft::map<char,int>::iterator, bool> ret;
 	// ret = ft::make_pair(mymap.begin(), true);
 
+	ft::map<char,int> mymap;
 
-	//shitty pair
-	std::map<char,int> theirmap;
+	// first insert function version (single parameter):
+	mymap.insert ( ft::pair<char,int>('a',100) );
+	mymap.insert ( ft::pair<char,int>('z',200) );
 
-	theirmap.insert ( std::pair<char,int>('a',100) );
-	theirmap.insert ( std::pair<char,int>('z',200) );
+	ft::pair<ft::map<char,int>::iterator,bool> ret;
+	ret = mymap.insert ( ft::pair<char,int>('z',500) );
+	if (ret.second==false) {
+		std::cout << "element 'z' already existed";
+		std::cout << " with a value of " << ret.first->second << '\n';
+	}
 
-	std::pair<std::map<char,int>::iterator,bool> ret;
-	ret = theirmap.insert ( std::pair<char,int>('z',500) );
-  	if (ret.second==false) {
-    	std::cout << "element 'z' already existed";
-    	std::cout << " with a value of " << ret.first->second << '\n';
-  }
-	//shitty pair
-	ft::pair<ft::map<char, int>::iterator, bool> rett;
-	rett = ft::make_pair(mymap.begin(), true);
+	// second insert function version (with hint position):
+	ft::map<char,int>::iterator it = mymap.begin();
+	mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
+	mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
 
-	// ft::pair<ft::map<char,int>::iterator, bool> ret = ft::make_pair(mymap.begin(), false);
-	// std::cout << ret.first->first << ' ' << ret.first->second << std::endl;
-	// std::cout << ret.first->first << ' ' << ret.first->second << std::endl;
+	// third insert function version (range insertion):
+	ft::map<char,int> anothermap;
+	anothermap.insert(mymap.begin(),mymap.find('c'));
+
+	 // showing contents:
+	std::cout << "mymap contains:\n";
+	for (it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
 	
-	// if (ret.second==true) {
-    // std::cout << "element 'z' didn't exist";
-    // std::cout << ret.first->first << " with a value of " << ret.first->second << '\n';
-	// }
+	std::cout << "anothermap contains:\n";
+ 	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+	std::cout << it->first << " => " << it->second << '\n';
 
-
-	// show content:
-	// for(ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
-	// 	std::cout << it->first << " => " << it->second << '\n';
 
 	return 0;
 }
