@@ -58,6 +58,7 @@ namespace ft
 			typedef typename allocator_type::pointer		pointer;
 			typedef size_t									size_type;
 			typedef ft::RBTree_iterator<node_type>			iterator;
+			typedef ft::RBTree_iterator<const node_type>	const_iterator;
 
 			// constructors & destructor
 			RBTree()

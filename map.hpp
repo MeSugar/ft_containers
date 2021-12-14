@@ -33,11 +33,10 @@ namespace ft
 			typedef typename allocator_type::const_reference						const_reference;
 			typedef typename allocator_type::pointer								pointer;
 			typedef typename allocator_type::const_pointer							const_pointer;
-			// typedef typename ft::RBTree_iterator<typename ft::RBTree<key_type, value_type>::node_type >	iterator;
 			typedef typename ft::RBTree<key_type, value_type>::iterator 			iterator;
-			// typedef typename ft::RBTree_iterator<const value_type>					const_iterator;
+			typedef typename ft::RBTree<key_type, value_type>::const_iterator		const_iterator;
 			typedef typename ft::reverse_iterator<iterator>							reverse_iterator;
-			// typedef typename ft::reverse_iterator<const iterator>					const_reverse_iterator;
+			typedef typename ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 			typedef typename ft::iterator_traits<iterator>::difference_type			difference_type; 
 			typedef size_t															size_type;
 
@@ -45,34 +44,44 @@ namespace ft
 			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
 			: _allocator(alloc), _comp(comp), _tree() {}
 
-			// template <class InputIterator>
-			// map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-			// 		const allocator_type& alloc = allocator_type(),
-			// 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
-			// : _allocator(alloc), _comp(comp), _tree()
+
+			template <class InputIterator>
+			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
+					const allocator_type& alloc = allocator_type())
+			: _allocator(alloc), _comp(comp), _tree()
+			{
+				try {
+					insert(first, last); }
+				catch (const std::exception& e) {
+					throw ; }
+			}
+
+			map(const map& x) : _allocator(x._allocator), _comp(x._comp), _tree(x._tree) {}
+
+			// map&	operator=(const map& x)
 			// {
-			// 	if (typeid(typename ft::iterator_traits<InputIterator>::iterator_category) == typeid(ft::bidirectional_iterator_tag))
-			// 	{
-			// 		try {
-			// 			insert(first, last); }
-			// 		catch (const std::exception& e) {
-			// 			throw ; }
-			// 	}
-			// 	else
-			// 	{
-			// 		std::cout << "Error : invalid input iterator" << std:: endl;
-			// 		throw ;
-			// 	}
+			// 	clear();
+			// 	_allocator = x._allocator;
+			// 	_comp = x._comp;
+			// 	_tree = x._tree;
 			// }
 
-			// map(const map& x) : _allocator(x._allocator), _comp(x._comp), _tree() { insert(x.begin(), x.end()); }
-
 			// iterators
-			iterator		begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
-			iterator		end() { return (iterator(_tree.get_nil(), _tree.get_nil())); }
+			iterator				begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
+			const_iterator			begin() const { return (const_iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
+			iterator				end() { return (iterator(_tree.get_nil(), _tree.get_nil())); }
 
 			// capacity
-			size_type size() const { return _tree.get_size(); }
+			size_type				size() const { return _tree.get_size(); }
+
+			// element access
+			mapped_type&			operator[](const key_type& k)
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
+				if (ptr == _tree.get_nil())
+					_tree.add(ft::make_pair(k, mapped_type()));
+				return (_tree.contains(k))->value.second;
+			}
 
 			// modifiers
 			pair<iterator, bool>	insert(const value_type& val)
@@ -102,13 +111,12 @@ namespace ft
 					insert(*first++);
 			}
 			
-
 			// observers
-			key_compare		key_comp() const { return (key_compare()); }
-			value_compare	value_comp() const { return (value_compare(key_compare())); }
+			key_compare				key_comp() const { return (key_compare()); }
+			value_compare			value_comp() const { return (value_compare(key_compare())); }
 
 			// operations
-			iterator find(const key_type& k)
+			iterator 				find(const key_type& k)
 			{
 				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
 				if (ptr != _tree.get_nil())
