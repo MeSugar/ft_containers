@@ -255,7 +255,7 @@
 // 	return 0;
 // }
 
-//operator[] test
+// operator[] test
 // int main ()
 // {
 //   ft::map<char,std::string> mymap;
@@ -304,7 +304,7 @@
 // }
 
 
-//operator= test
+// // operator= test
 // int main ()
 // {
 //   ft::map<char,int> first;
@@ -323,20 +323,76 @@
 // }
 
 
-//begin test
-int main ()
+//begin test && const_iterator test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+
+//   mymap['b'] = 100;
+//   mymap['a'] = 200;
+//   mymap['c'] = 300;
+
+//   // show content:
+//   ft::map<char,int>::iterator it=mymap.begin();
+//   it->second = 333;
+// 	ft::map<char,int>::const_iterator itt = it;
+// //   itt->second = 333;
+//   for (; itt!=mymap.end(); ++itt)
+//     std::cout << itt->first << " => " << itt->second << '\n';
+// 	// ft::map<char,int>::iterator ittt = itt;
+
+//   return 0;
+// }
+
+//rbegin test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+//   std::map<char,int> theirmap;
+
+//   mymap['x'] = 100;
+//   mymap['y'] = 200;
+//   mymap['z'] = 300;
+
+//   // show content:
+//   ft::map<char,int>::reverse_iterator rit = mymap.rbegin();
+// //   ft::map<char,int>::iterator it = mymap.begin();
+//   std::map<char,int>::reverse_iterator ritt = theirmap.rbegin();
+//   ritt++;
+// //   for (; rit!=mymap.rend(); ++rit)
+//     // std::cout << rit->first << " => " << rit->second << '\n';
+// 	// std::cout << rit->value << std::endl;
+
+//   return 0;
+// }
+
+
+int main()
 {
-  ft::map<char,int> mymap;
+    {
+		const int range_int[] = {1458, -985, 58, 632, 65};
+		const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
-  mymap['b'] = 100;
-  mymap['a'] = 200;
-  mymap['c'] = 300;
+		std::map<int, std::string> stl_map;
+		ft::map<int, std::string> ft_map;
 
-  // show content:
-  for (ft::map<char,int>::const_iterator it=mymap.begin(); it!=mymap.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+		for (int i = 0; i < 5; i++)
+		{
+			stl_map.insert(std::make_pair(range_int[i], range_str[i]));
+			ft_map.insert(ft::make_pair(range_int[i], range_str[i]));
+		}
 
-  return 0;
+		// fs.open("./tester/maps_output/reverse_begin", std::fstream::in | std::fstream::out | std::fstream::trunc);
+		
+		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rbegin();
+		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rbegin();
+
+		// printMapAttributes(fs, stl_map, ft_map);
+
+		std::cout << stl_it->first << ' ' << stl_it->second << std::endl;
+		std::cout << ft_it->first << ' ' << ft_it->second << std::endl;
+
+		++stl_it;
+		++ft_it;
 }
-
-
+}

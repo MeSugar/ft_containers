@@ -12,6 +12,7 @@ namespace ft
 	{
 		public:
 			typedef T					value_type;
+			// typedef const T				const_value_type;
 			typedef	node<value_type>*	pointer;
 			typedef	node<value_type>&	reference;
 
@@ -58,7 +59,7 @@ namespace ft
 			typedef typename allocator_type::pointer		pointer;
 			typedef size_t									size_type;
 			typedef ft::RBTree_iterator<node_type>			iterator;
-			typedef ft::RBTree_iterator<const node_type>	const_iterator;
+			typedef ft::RBTree_const_iterator<node_type>	const_iterator;
 
 			// constructors & destructor
 			RBTree()

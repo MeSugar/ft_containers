@@ -70,6 +70,11 @@ namespace ft
 			iterator				begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
 			const_iterator			begin() const { return (const_iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
 			iterator				end() { return (iterator(_tree.get_nil(), _tree.get_nil())); }
+			const_iterator			end() const { return (const_iterator(_tree.get_nil(), _tree.get_nil())); }
+			reverse_iterator		rbegin() { return reverse_iterator(end()); }
+			reverse_iterator		rend() { return reverse_iterator(begin()); }
+
+			
 
 			// capacity
 			size_type				size() const { return _tree.get_size(); }
