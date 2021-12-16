@@ -155,24 +155,23 @@ namespace ft
 	{
 		public:
 			// aliases
-			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type		node_type;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type		node_value_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type	difference_type;
-			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer			pointer;
-			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer			node_pointer;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference			node_reference;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
 			typedef typename T::value_type														value_type;
-			typedef value_type*																	data_pointer;
-			typedef value_type&																	data_reference;
+			typedef value_type*																	pointer;
+			typedef value_type&																	reference;
 
 			// constructors && destructor
 			RBTree_iterator() {}
-			RBTree_iterator(pointer x, pointer nil) : ptr(x), NIL(nil) {}
+			RBTree_iterator(node_pointer x, node_pointer nil) : ptr(x), NIL(nil) {}
 			RBTree_iterator(const RBTree_iterator &other) : ptr(other.ptr), NIL(other.NIL) {}
 			~RBTree_iterator() {}
 			
-
-			pointer			get_value_pointer() const { return ptr; }
-			pointer			get_nil_pointer() const { return NIL; }
+			node_pointer			get_value_pointer() const { return ptr; }
+			node_pointer			get_nil_pointer() const { return NIL; }
 
 			// overloads
 			RBTree_iterator &operator=(const RBTree_iterator& other)
@@ -182,10 +181,10 @@ namespace ft
 				return (*this);
 			}
 			
-			data_reference			operator*() const { return ptr->value; }
-			data_pointer			operator->() const { return &ptr->value; }
-			bool					operator==(const RBTree_iterator &other) { return (ptr == other.ptr); }
-			bool					operator!=(const RBTree_iterator &other) { return (ptr != other.ptr); }
+			reference			operator*() const { return ptr->value; }
+			pointer				operator->() const { return &ptr->value; }
+			bool				operator==(const RBTree_iterator &other) { return (ptr == other.ptr); }
+			bool				operator!=(const RBTree_iterator &other) { return (ptr != other.ptr); }
 
 			RBTree_iterator&	operator++(void)
 			{
@@ -195,9 +194,11 @@ namespace ft
 					while (ptr->left != NIL)
 						ptr = ptr->left;
 				}
+				else if (ptr->right->parent == ptr)
+					ptr = ptr->right;
 				else 
 				{
-					pointer tmp = ptr->parent;
+					node_pointer tmp = ptr->parent;
 					while (ptr == tmp->right)
 					{
 						ptr = tmp;
@@ -222,14 +223,16 @@ namespace ft
 					ptr = ptr->right;
 				else if (ptr->left != NIL)
 				{
-					pointer tmp = ptr->left;
+					node_pointer tmp = ptr->left;
 					while (tmp->right != NIL)
 					tmp = tmp->right;
 					ptr = tmp;
 				}
+				else if (ptr == NIL)
+					ptr = ptr->parent;
 				else
 				{
-					pointer tmp = ptr->parent;
+					node_pointer tmp = ptr->parent;
 					while (ptr == tmp->left)
 					{
 						ptr = tmp;
@@ -248,8 +251,8 @@ namespace ft
 			}
 
 		protected:
-			pointer ptr;
-			pointer NIL;
+			node_pointer ptr;
+			node_pointer NIL;
 	};
 
 	// RBTree_const_iterator
@@ -370,13 +373,19 @@ namespace ft
 			typedef typename ft::iterator_traits<Iterator>::reference			reference;
 
 			// constructors && destructor
-			reverse_iterator() {}
-			explicit reverse_iterator(iterator_type it) : revIt(it) {}
+			reverse_iterator() : revIt() {}
+			explicit reverse_iterator(iterator_type const &it) : revIt(it) {}
 			template <class Iter>
 			reverse_iterator(const reverse_iterator<Iter>& rev_it) : revIt(rev_it.revIt) {}
 			~reverse_iterator() {}
 			
 			// overloads
+			reverse_iterator &operator=(reverse_iterator const &other)
+			{
+				revIt = other.revIt;
+				return (*this);
+			}
+			
 			reference operator*(void) const
 			{ 
 				iterator_type tmp = revIt;

@@ -60,6 +60,9 @@ namespace ft
 			typedef size_t									size_type;
 			typedef ft::RBTree_iterator<node_type>			iterator;
 			typedef ft::RBTree_const_iterator<node_type>	const_iterator;
+			typedef ft::reverse_iterator<iterator>			reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+			
 
 			// constructors & destructor
 			RBTree()
@@ -101,6 +104,13 @@ namespace ft
 			void	remove(value_type &val)
 			{
 				pointer ptr = contains(val);
+				if (ptr != _NIL)
+					remove(ptr);
+			}
+
+			void	remove(const key_type &key)
+			{
+				pointer ptr = contains(key);
 				if (ptr != _NIL)
 					remove(ptr);
 			}
@@ -191,6 +201,19 @@ namespace ft
 			pointer	contains(const value_type &val) { return contains(val, _root); }
 			pointer	contains(const key_type &key) { return contains(key, _root); }
 			pointer	contains(pointer position, const value_type &val) { return contains(val, position); }
+			
+			void	swap(RBTree &x)
+			{
+				pointer		tmp_root = _root;
+				pointer		tmp_NIL = _NIL;
+				size_type	tmp_size = _size;
+				_root = x._root;
+				_NIL = x._NIL;
+				_size = x._size;
+				x._root = tmp_root;
+				x._NIL = tmp_NIL;
+				x._size = tmp_size;
+			}
 
 		protected:
 			allocator_type		_allocator;

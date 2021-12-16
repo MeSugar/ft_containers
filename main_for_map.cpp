@@ -207,20 +207,7 @@
 //insert tests
 // int main ()
 // {
-
-	// mymap.insert(ft::pair<char, int>('d', 400));
-	// mymap.insert(ft::pair<char, int>('a', 100));
-	// mymap.insert(ft::pair<char, int>('i', 800));
-	// mymap.insert(ft::pair<char, int>('h', 900));
-	// mymap.insert(ft::pair<char, int>('b', 200));
-	// mymap.insert(ft::pair<char, int>('f', 600));
-	// mymap.insert(ft::pair<char, int>('c', 300));
-	// mymap.insert(ft::pair<char, int>('j', 1100));
-	// mymap.insert(ft::pair<char, int>('e', 500));
-	// ft::pair<ft::map<char,int>::iterator, bool> ret;
-	// ret = ft::make_pair(mymap.begin(), true);
-
-	// ft::map<char,int> mymap;
+// 	ft::map<char,int> mymap;
 
 // 	// first insert function version (single parameter):
 // 	mymap.insert ( ft::pair<char,int>('a',100) );
@@ -250,8 +237,6 @@
 // 	std::cout << "anothermap contains:\n";
 //  	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 // 	std::cout << it->first << " => " << it->second << '\n';
-
-
 // 	return 0;
 // }
 
@@ -344,11 +329,10 @@
 //   return 0;
 // }
 
-//rbegin test
+//rbegin && rend test
 // int main ()
 // {
 //   ft::map<char,int> mymap;
-//   std::map<char,int> theirmap;
 
 //   mymap['x'] = 100;
 //   mymap['y'] = 200;
@@ -357,42 +341,174 @@
 //   // show content:
 //   ft::map<char,int>::reverse_iterator rit = mymap.rbegin();
 // //   ft::map<char,int>::iterator it = mymap.begin();
-//   std::map<char,int>::reverse_iterator ritt = theirmap.rbegin();
-//   ritt++;
-// //   for (; rit!=mymap.rend(); ++rit)
-//     // std::cout << rit->first << " => " << rit->second << '\n';
-// 	// std::cout << rit->value << std::endl;
+// //   std::map<char,int>::reverse_iterator ritt = theirmap.rbegin();
+//   for (; rit!=mymap.rend(); ++rit)
+//     std::cout << rit->first << " => " << rit->second << '\n';
+
+// {
+// 		const int range_int[] = {1458, -985, 58, 632, 65};
+// 		const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
+
+// 		std::map<int, std::string> stl_map;
+// 		ft::map<int, std::string> ft_map;
+
+// 		for (int i = 0; i < 5; i++)
+// 		{
+// 			stl_map.insert(std::make_pair(range_int[i], range_str[i]));
+// 			ft_map.insert(ft::make_pair(range_int[i], range_str[i]));
+// 		}
+
+
+// 		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rbegin();
+// 		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rbegin();
+	
+// 		std::cout << stl_it->first << ' ' << stl_it->second << std::endl;
+// 		std::cout << ft_it->first << ' ' << ft_it->second << std::endl;
+// }
+
+//   return 0;
+// }
+
+//empty test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+
+// 	std::cout << mymap.size() << std::endl;
+
+//   mymap['a']=10;
+//   mymap['b']=20;
+//   mymap['c']=30;
+
+// //   while (!mymap.empty())
+// //   {
+// //     std::cout << mymap.begin()->first << " => " << mymap.begin()->second << '\n';
+// //     mymap.erase(mymap.begin());
+// //   }
+// 	std::cout << mymap.size() << std::endl;
+//   return 0;
+// }
+
+//max_size test
+// int main ()
+// {
+//   int i;
+//   ft::map<int,int> mymap;
+
+//   if (mymap.max_size()>1000)
+//   {
+//     for (i=0; i<1000; i++) mymap[i]=0;
+//     std::cout << "The map contains 1000 elements.\n";
+//   }
+//   else std::cout << "The map could not hold 1000 elements.\n";
+
+//   return 0;
+// }
+
+//erase test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+//   ft::map<char,int>::iterator it;
+
+  // insert some values:
+//   mymap['a']=10;
+//   mymap['b']=20;
+//   mymap['c']=30;
+//   mymap['d']=40;
+//   mymap['e']=50;
+//   mymap['f']=60;
+
+//   it=mymap.find('b');
+//   mymap.erase (it);                   // erasing by iterator
+
+//   mymap.erase ('c');                  // erasing by key
+
+//   it=mymap.find ('e');
+//   mymap.erase ( it, mymap.end() );    // erasing by range
+
+// //   // show content:
+//   for (it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+//   return 0;
+// }
+
+//swap test
+// int main ()
+// {
+// 	ft::map<char,int> foo,bar;
+
+// 	foo['x']=100;
+// 	foo['y']=200;
+
+// 	bar['a']=11;
+// 	bar['b']=22;
+// 	bar['c']=33;
+
+// 	foo.swap(bar);
+
+// 	std::cout << "foo size: " << foo.size() << std::endl;
+// 	std::cout << "foo contains:\n";
+// 	for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+// 		std::cout << it->first << " => " << it->second << '\n';
+
+// 	std::cout << "bar size: " << bar.size() << std::endl;
+// 	std::cout << "bar contains:\n";
+// 	for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+// 		std::cout << it->first << " => " << it->second << '\n';
 
 //   return 0;
 // }
 
 
-int main()
-{
-    {
-		const int range_int[] = {1458, -985, 58, 632, 65};
-		const std::string range_str[] = {"One", "Two", "Three", "Four", "Five"};
 
-		std::map<int, std::string> stl_map;
-		ft::map<int, std::string> ft_map;
 
-		for (int i = 0; i < 5; i++)
-		{
-			stl_map.insert(std::make_pair(range_int[i], range_str[i]));
-			ft_map.insert(ft::make_pair(range_int[i], range_str[i]));
-		}
 
-		// fs.open("./tester/maps_output/reverse_begin", std::fstream::in | std::fstream::out | std::fstream::trunc);
-		
-		std::map<int, std::string>::reverse_iterator stl_it = stl_map.rbegin();
-		ft::map<int, std::string>::reverse_iterator ft_it = ft_map.rbegin();
 
-		// printMapAttributes(fs, stl_map, ft_map);
 
-		std::cout << stl_it->first << ' ' << stl_it->second << std::endl;
-		std::cout << ft_it->first << ' ' << ft_it->second << std::endl;
 
-		++stl_it;
-		++ft_it;
-}
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//get_allocator test
+// int main ()
+// {
+//   int psize;
+//   ft::map<char,int> mymap;
+//   ft::pair<const char,int>* p;
+
+//   // allocate an array of 5 elements using mymap's allocator:
+//   p=mymap.get_allocator().allocate(5);
+
+//   // assign some values to array
+//   psize = sizeof(std::map<char,int>::value_type)*5;
+
+//   std::cout << "The allocated array has a size of " << psize << " bytes.\n";
+
+//   mymap.get_allocator().deallocate(p,5);
+
+//   return 0;
+// }
