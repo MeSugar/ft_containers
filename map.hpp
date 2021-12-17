@@ -58,15 +58,19 @@ namespace ft
 					throw ; }
 			}
 
-			map(const map& x) : _allocator(x._allocator), _comp(x._comp), _tree(x._tree) {}
+			map(const map& x) { *this = x; }
 
-			// map&	operator=(const map& x)
-			// {
-			// 	clear();
-			// 	_allocator = x._allocator;
-			// 	_comp = x._comp;
-			// 	_tree = x._tree;
-			// }
+			~map() { clear(); }
+
+			map&	operator=(const map& x)
+			{
+				_allocator = x._allocator;
+				_comp = x._comp;
+				clear();
+				_tree = RBTree<key_type, value_type>();
+				insert(x.begin(), x.end());
+				return *this;
+			}
 
 			// iterators
 			iterator				begin() { return (iterator(_tree.minimum(_tree.get_root()), _tree.get_nil())); }
@@ -79,13 +83,13 @@ namespace ft
 			const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
 			// capacity
-			bool					empty() const { return (_tree.get_size() == 0); }
-			size_type				size() const { return _tree.get_size(); }
-			size_type 				max_size() const { return _allocator.max_size(); }
+			bool		empty() const { return (_tree.get_size() == 0); }
+			size_type	size() const { return _tree.get_size(); }
+			size_type 	max_size() const { return _allocator.max_size(); }
 			
 
 			// element access
-			mapped_type&			operator[](const key_type& k)
+			mapped_type&	operator[](const key_type& k)
 			{
 				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
 				if (ptr == _tree.get_nil())
@@ -135,19 +139,60 @@ namespace ft
 			}
 
 			void					swap(map& x) { _tree.swap(x._tree); }
+
+			void					clear()
+			{ 
+				erase(begin(), end());
+				_tree.clear_nil_node();
+			}
 			
 			// observers
-			key_compare				key_comp() const { return (key_compare()); }
-			value_compare			value_comp() const { return (value_compare(key_compare())); }
+			key_compare		key_comp() const { return (key_compare()); }
+			value_compare	value_comp() const { return (value_compare(key_compare())); }
 
 			// operations
-			iterator 				find(const key_type& k)
+			iterator 		find(const key_type& k)
 			{
 				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
 				if (ptr != _tree.get_nil())
 					return iterator(ptr, _tree.get_nil());
 				return end();
 			}
+
+			size_type		count(const key_type& k) const
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
+				if (ptr != _tree.get_nil())
+					return 1;
+				return 0;
+			}
+			
+			iterator		lower_bound(const key_type& k)
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
+				if (ptr != _tree.get_nil())
+					return (--(iterator(_tree.successor(ptr), _tree.get_nil())));
+				return end();
+
+			}
+
+			const_iterator	lower_bound(const key_type& k) const { return const_iterator(lower_bound(k)); }
+
+			iterator								upper_bound(const key_type& k)
+			{
+				typename RBTree<Key, value_type>::pointer ptr = _tree.contains(k);
+				if (ptr != _tree.get_nil())
+					return iterator(_tree.successor(ptr), _tree.get_nil());
+				return end();
+			}
+
+			const_iterator	upper_bound(const key_type& k) const { return const_iterator(upper_bound(k)); }
+			
+			pair<iterator, iterator>	equal_range(const key_type& k)
+			{ return (ft::make_pair(lower_bound(k), upper_bound(k))); }
+
+			pair<const_iterator, const_iterator>	equal_range(const key_type& k) const
+			{ return (ft::make_pair(lower_bound(k), upper_bound(k))); }
 
 			// allocator
 			allocator_type			get_allocator() const { return _allocator; }

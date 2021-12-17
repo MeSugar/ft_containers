@@ -411,7 +411,7 @@
 //   ft::map<char,int> mymap;
 //   ft::map<char,int>::iterator it;
 
-  // insert some values:
+//   // insert some values:
 //   mymap['a']=10;
 //   mymap['b']=20;
 //   mymap['c']=30;
@@ -460,37 +460,101 @@
 //   return 0;
 // }
 
+//clear test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+
+//   mymap['x']=100;
+//   mymap['y']=200;
+//   mymap['z']=300;
+
+//   std::cout << "mymap contains:\n";
+//   for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+//   mymap.clear();
+//   mymap['a']=1101;
+//   mymap['b']=2202;
+
+//   std::cout << "mymap contains:\n";
+//   for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+//   return 0;
+// }
 
 
+// // count test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+//   char c;
+
+//   mymap ['a']=101;
+//   mymap ['c']=202;
+//   mymap ['f']=303;
+
+//   for (c='a'; c<'h'; c++)
+//   {
+//     std::cout << c;
+//     if (mymap.count(c)>0)
+//       std::cout << " is an element of mymap.\n";
+//     else 
+//       std::cout << " is not an element of mymap.\n";
+//   }
+
+//   return 0;
+// }
+
+// //lower bound test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+//   ft::map<char,int>::iterator itlow,itup;
+
+//   mymap['a']=20;
+//   mymap['b']=40;
+//   mymap['c']=60;
+//   mymap['d']=80;
+//   mymap['e']=100;
+
+//   itlow=mymap.lower_bound ('b');  // itlow points to b
+//   std::cout << "itlow points to: " << itlow->first << " => " << itlow->second << '\n';
+
+//   itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+//   std::cout << "itup points to: " << itup->first << " => " << itup->second << '\n';
 
 
+//   mymap.erase(itlow,itup);        // erases [itlow,itup)
 
+//   // print content:
+//   for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
 
+//   return 0;
+// }
 
+// // equal_range test
+// int main ()
+// {
+//   ft::map<char,int> mymap;
 
+//   mymap['a']=10;
+//   mymap['b']=20;
+//   mymap['c']=30;
 
+//   ft::pair<ft::map<char,int>::iterator,ft::map<char,int>::iterator> ret;
+//   ret = mymap.equal_range('b');
 
+//   std::cout << "lower bound points to: ";
+//   std::cout << ret.first->first << " => " << ret.first->second << '\n';
 
+//   std::cout << "upper bound points to: ";
+//   std::cout << ret.second->first << " => " << ret.second->second << '\n';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//   return 0;
+// }
 
 
 //get_allocator test

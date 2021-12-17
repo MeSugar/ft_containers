@@ -168,7 +168,7 @@ namespace ft
 			RBTree_iterator() {}
 			RBTree_iterator(node_pointer x, node_pointer nil) : ptr(x), NIL(nil) {}
 			RBTree_iterator(const RBTree_iterator &other) : ptr(other.ptr), NIL(other.NIL) {}
-			~RBTree_iterator() {}
+			virtual ~RBTree_iterator() {}
 			
 			node_pointer			get_value_pointer() const { return ptr; }
 			node_pointer			get_nil_pointer() const { return NIL; }

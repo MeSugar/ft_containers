@@ -31,7 +31,7 @@ namespace ft
 			node(const node &other): value(other.value), parent(other.parent), right(other.right),
 					left(other.left), is_black(other.is_black) {}
 
-			~node() {}
+			virtual ~node() {}
 
 			node	&operator=(const node &other)
 			{
@@ -62,7 +62,6 @@ namespace ft
 			typedef ft::RBTree_const_iterator<node_type>	const_iterator;
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-			
 
 			// constructors & destructor
 			RBTree()
@@ -76,7 +75,8 @@ namespace ft
 				_root = _NIL;
 				_size = 0; 
 			}
-			~RBTree() {}
+
+			virtual ~RBTree() {}
 
 			// methods
 			pointer		get_root() const { return _root; }
@@ -115,32 +115,14 @@ namespace ft
 					remove(ptr);
 			}
 
-			// size_type	height()
-			// {
-			// 	if (!_root)
-			// 		return 0;
-			// 	return (height(_root) - 1);
-			// }
-
-			// size_type	height(pointer ptr)
-			// {
-			// 	if (ptr == _NIL)
-			// 		return 0;
-			// 	size_type left_height = height(ptr->left) + 1;
-			// 	size_type right_height = height(ptr->right) + 1;
-			// 	if (left_height > right_height)
-			// 		return left_height;
-			// 	return right_height;
-			// }
-
-			pointer		minimum(pointer ptr)
+			pointer		minimum(pointer ptr) const
 			{
 				while (ptr->left != _NIL)
 					ptr = ptr->left;
 				return ptr;
 			}
 
-			pointer		maximum(pointer ptr)
+			pointer		maximum(pointer ptr) const
 			{
 				while (ptr->right != _NIL)
 					ptr = ptr->right;
@@ -160,7 +142,7 @@ namespace ft
 				return tmp;
 			}
 
-			pointer		successor(const pointer ptr)
+			pointer		successor(pointer ptr)
 			{
 				if (ptr->right != _NIL)
 					return (minimum(ptr->right));
@@ -188,19 +170,9 @@ namespace ft
 				return left_black_nodes;
 			}
 
-			void inOrderHelper(pointer ptr, std::ostream &ofs)
-			{				
-				if (ptr != _NIL)
-				{
-					inOrderHelper(ptr->left, ofs);
-					ofs << ptr->value.first << " => " << ptr->value.second << " => " << ptr->is_black << '\n';
-					inOrderHelper(ptr->right, ofs);
-				} 
-			}
-
-			pointer	contains(const value_type &val) { return contains(val, _root); }
-			pointer	contains(const key_type &key) { return contains(key, _root); }
-			pointer	contains(pointer position, const value_type &val) { return contains(val, position); }
+			pointer	contains(const value_type &val) const { return contains(val, _root); }
+			pointer	contains(const key_type &key) const { return contains(key, _root); }
+			pointer	contains(pointer position, const value_type &val) const { return contains(val, position); }
 			
 			void	swap(RBTree &x)
 			{
@@ -214,6 +186,8 @@ namespace ft
 				x._NIL = tmp_NIL;
 				x._size = tmp_size;
 			}
+
+			void	clear_nil_node() { destroy_n_dealloc (_NIL); }
 
 		protected:
 			allocator_type		_allocator;
@@ -385,9 +359,9 @@ namespace ft
 				}
 				if (min_original_color == true)
 					remove_color_fix(tmp);
-				destroy_n_dealloc(ptr);
 				_size--;
 				_NIL->parent = maximum(_root);
+				destroy_n_dealloc(ptr);
 			}
 
 			void	remove_color_fix(pointer ptr)
@@ -462,7 +436,7 @@ namespace ft
 				black_nodes(_root);
 			}
 
-			pointer	contains(const value_type &val, pointer ptr)
+			pointer	contains(const value_type &val, pointer ptr) const
 			{
 				if (ptr == _NIL)
 					return _NIL;
@@ -473,7 +447,7 @@ namespace ft
 				return contains(val, ptr->right);
 			}
 
-			pointer	contains(const key_type &key, pointer ptr)
+			pointer	contains(const key_type &key, pointer ptr) const
 			{
 				if (ptr == _NIL)
 					return _NIL;
