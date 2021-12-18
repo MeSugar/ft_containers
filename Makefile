@@ -4,9 +4,9 @@ CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 
 CC			=	clang++
 
-INCLUDES	=	utility.hpp iterator.hpp tree.hpp vector.hpp map.hpp
+INCLUDES	=	utility.hpp iterator.hpp tree.hpp vector.hpp map.hpp stack.hpp
 
-SRCS		=	main_for_map.cpp
+SRCS		=	main_for_stack.cpp
 
 all : $(NAME)
 

@@ -12,7 +12,6 @@ namespace ft
 	{
 		public:
 			typedef T					value_type;
-			// typedef const T				const_value_type;
 			typedef	node<value_type>*	pointer;
 			typedef	node<value_type>&	reference;
 

@@ -24,7 +24,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; 
 			typedef size_t													size_type;
 		
-			// member functions
+			// constructors & destructor
 			explicit vector(const allocator_type& alloc = allocator_type())
 			: _allocator(alloc)
 			{
