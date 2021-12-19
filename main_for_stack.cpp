@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <stack>
 
 //constructors test
 // int main ()
@@ -70,23 +71,23 @@
 //   return 0;
 // }
 
-// // relational operators test
-// int main ()
-// {
-// 	ft::stack<int> mystack1;
-// 	ft::stack<int> mystack2;
+// relational operators test
+int main ()
+{
+	ft::stack<int> mystack1;
+	ft::stack<int> mystack2;
 
-// 	for (int i=0; i<5; ++i) mystack1.push(i);
-// 	for (int i=3; i<8; ++i) mystack2.push(i);
-// 	if (mystack1 == mystack2)
-// 		std::cout << "stack1 == stack2" << std::endl;
-// 	if (mystack1 < mystack2)
-// 		std::cout << "stack1 < stack2" << std::endl;
-// 	if (mystack1 > mystack2)
-// 		std::cout << "stack1 > stack2" << std::endl;
-// 	if (mystack1 >= mystack2)
-// 		std::cout << "stack1 >= stack2" << std::endl;
-// 	if (mystack1 <= mystack2)
-// 		std::cout << "stack1 <= stack2" << std::endl;
-// }
+	for (int i=0; i<5; ++i) mystack1.push(i);
+	for (int i=3; i<8; ++i) mystack2.push(i);
+	if (mystack1 == mystack2)
+		std::cout << "stack1 == stack2" << std::endl;
+	if (mystack1 < mystack2)
+		std::cout << "stack1 < stack2" << std::endl;
+	if (mystack1 > mystack2)
+		std::cout << "stack1 > stack2" << std::endl;
+	if (mystack1 >= mystack2)
+		std::cout << "stack1 >= stack2" << std::endl;
+	if (mystack1 <= mystack2)
+		std::cout << "stack1 <= stack2" << std::endl;
+}
 
