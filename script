@@ -1,5 +1,0 @@
-for i in {1..200}
-do
-   ./Map_test
-   diff test1 test2
-done
