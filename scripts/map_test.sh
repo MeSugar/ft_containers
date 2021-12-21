@@ -155,3 +155,17 @@ then
 else
     printf "${GREEN}OK\n"
 fi
+
+printf "${BLUE}elements_order: "
+if [[ $(diff map_tests/ft_elements_order_test map_tests/stl_elements_order_test) ]]
+then
+    printf "${RED}KO\n"
+else
+    printf "${GREEN}OK\n"
+fi
+
+printf "${BLUE}execution_time (10000 elements):\n"
+    printf '\t'
+    cat ./map_tests/ft_execution_time_test
+    printf '\t'
+    cat ./map_tests/stl_execution_time_test

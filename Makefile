@@ -7,7 +7,7 @@ CC			=	clang++
 INCLUDES	=	includes/utility.hpp includes/iterator.hpp includes/tree.hpp \
 				includes/vector.hpp includes/map.hpp includes/stack.hpp includes/test.hpp
 
-SRCS		=	sources/main.cpp sources/vector_tests.cpp sources/map_tests.cpp
+SRCS		=	sources/main.cpp sources/vector_tests.cpp sources/map_tests.cpp sources/stack_tests.cpp 
 
 
 all : $(NAME)
@@ -22,6 +22,7 @@ fclean : clean
 		@rm -rf $(NAME)
 		@rm -rf ./vector_tests/
 		@rm -rf ./map_tests/
+		@rm -rf ./stack_tests/
 
 re : fclean all
 

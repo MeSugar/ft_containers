@@ -802,6 +802,96 @@ void	map_get_allocator_test()
 	}
 }
 
+void	map_elements_order_test()
+{
+	{
+		std::ofstream ofs("./map_tests/ft_elements_order_test");
+		ft::map<std::string, int> mymap;
+		mymap.insert(ft::pair<std::string, int>("ehe", 121));
+		mymap.insert(ft::pair<std::string, int>("ehu", 122));
+		mymap.insert(ft::pair<std::string, int>("bbag", 123));
+		mymap.insert(ft::pair<std::string, int>("www", 124));
+		mymap.insert(ft::pair<std::string, int>("bba", 125));
+		mymap.insert(ft::pair<std::string, int>("aaa", 126));
+		mymap.insert(ft::pair<std::string, int>("bhaa", 127));
+		mymap.insert(ft::pair<std::string, int>("bbsasda", 128));
+		mymap.insert(ft::pair<std::string, int>("ddzag", 129));
+		mymap.insert(ft::pair<std::string, int>("dag", 130));
+		mymap.insert(ft::pair<std::string, int>("czg", 131));
+		mymap.insert(ft::pair<std::string, int>("ea", 132));
+		mymap.insert(ft::pair<std::string, int>("qqa", 133));
+		mymap.insert(ft::pair<std::string, int>("her", 134));
+		mymap.insert(ft::pair<std::string, int>("wery", 135));
+		mymap.insert(ft::pair<std::string, int>("aadtr", 136));
+		mymap.insert(ft::pair<std::string, int>("utdf", 137));
+		ofs << "mymap contains:\n";
+		for (ft::map<std::string, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+			ofs << it->first << ' ' << it->second << std::endl;
+		ofs.close();
+	}
+	{
+		std::ofstream ofs("./map_tests/stl_elements_order_test");
+		std::map<std::string, int> mymap;
+		mymap.insert(std::pair<std::string, int>("ehe", 121));
+		mymap.insert(std::pair<std::string, int>("ehu", 122));
+		mymap.insert(std::pair<std::string, int>("bbag", 123));
+		mymap.insert(std::pair<std::string, int>("www", 124));
+		mymap.insert(std::pair<std::string, int>("bba", 125));
+		mymap.insert(std::pair<std::string, int>("aaa", 126));
+		mymap.insert(std::pair<std::string, int>("bhaa", 127));
+		mymap.insert(std::pair<std::string, int>("bbsasda", 128));
+		mymap.insert(std::pair<std::string, int>("ddzag", 129));
+		mymap.insert(std::pair<std::string, int>("dag", 130));
+		mymap.insert(std::pair<std::string, int>("czg", 131));
+		mymap.insert(std::pair<std::string, int>("ea", 132));
+		mymap.insert(std::pair<std::string, int>("qqa", 133));
+		mymap.insert(std::pair<std::string, int>("her", 134));
+		mymap.insert(std::pair<std::string, int>("wery", 135));
+		mymap.insert(std::pair<std::string, int>("aadtr", 136));
+		mymap.insert(std::pair<std::string, int>("utdf", 137));
+		ofs << "mymap contains:\n";
+		for (std::map<std::string, int>::iterator it = mymap.begin(); it != mymap.end(); it++)
+			ofs << it->first << ' ' << it->second << std::endl;
+		ofs.close();
+	}
+}
+
+void	map_execution_time_test(unsigned elements)
+{
+	std::vector<int> myvect = random_numbers_generator(elements);
+	{
+		struct timeval start, end;
+		std::ofstream ofs("./map_tests/ft_execution_time_test");
+		gettimeofday(&start, NULL);
+		ft::map<int, int> mymap;
+		for (unsigned i = 0; i < myvect.size(); i++)
+			mymap.insert(ft::pair<int, int>(myvect[i], myvect[i]));
+		gettimeofday(&end, NULL);
+		double time_taken;
+    	time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    	time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+		ofs << "time taken by ft_map is : " << std::fixed << time_taken << std::setprecision(6);
+		ofs << "sec" << std::endl;
+		ofs.close();
+	}
+	{
+		struct timeval start, end;
+		std::ofstream ofs("./map_tests/stl_execution_time_test");
+		gettimeofday(&start, NULL);
+		std::map<int, int> mymap;
+		for (unsigned i = 0; i < myvect.size(); i++)
+			mymap.insert(std::pair<int, int>(myvect[i], myvect[i]));
+		gettimeofday(&end, NULL);
+		double time_taken;
+    	time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    	time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+		ofs << "time taken by stl_map is : " << std::fixed << time_taken << std::setprecision(6);
+		ofs << "sec" << std::endl;
+		ofs.close();
+	}
+}
+
+
 void    map_test()
 {
 	mkdir("./map_tests", 0777);
@@ -824,4 +914,6 @@ void    map_test()
 	map_lower_upper_test();
 	map_equal_range_test();
 	map_get_allocator_test();
+	map_elements_order_test();
+	map_execution_time_test(10000);
 }

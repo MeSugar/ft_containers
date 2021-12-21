@@ -196,3 +196,9 @@ then
 else
     printf "${GREEN}OK\n"
 fi
+
+printf "${BLUE}execution_time (10000 elements):\n"
+    printf '\t'
+    cat ./vector_tests/ft_execution_time_test
+    printf '\t'
+    cat ./vector_tests/stl_execution_time_test

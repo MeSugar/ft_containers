@@ -988,6 +988,43 @@ void	vector_const_iterators_compare_test()
 	}
 }
 
+void	vector_execution_time_test(unsigned elements)
+{
+	std::vector<int> myvect = random_numbers_generator(elements);
+	{
+		struct timeval start, end;
+		std::ofstream ofs("./vector_tests/ft_execution_time_test");
+		gettimeofday(&start, NULL);
+		ft::vector<int> myvector1;
+		for (unsigned i = 0; i < myvect.size(); i++)
+			myvector1.push_back(myvect[i]);
+		ft::vector<int> myvector2(myvector1);
+		gettimeofday(&end, NULL);
+		double time_taken;
+    	time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    	time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+		ofs << "time taken by ft_vector is : " << std::fixed << time_taken << std::setprecision(6);
+		ofs << "sec" << std::endl;
+		ofs.close();
+	}
+	{
+		struct timeval start, end;
+		std::ofstream ofs("./vector_tests/stl_execution_time_test");
+		gettimeofday(&start, NULL);
+		std::vector<int> myvector1;
+		for (unsigned i = 0; i < myvect.size(); i++)
+			myvector1.push_back(myvect[i]);
+		std::vector<int> myvector2(myvector1);
+		gettimeofday(&end, NULL);
+		double time_taken;
+    	time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+    	time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+		ofs << "time taken by stl_vector is : " << std::fixed << time_taken << std::setprecision(6);
+		ofs << "sec" << std::endl;
+		ofs.close();
+	}
+}
+
 void	vector_test()
 {
     mkdir("./vector_tests", 0777);
@@ -1015,4 +1052,5 @@ void	vector_test()
 	vector_get_allocator_test();
 	vector_relational_operators_test();
 	vector_const_iterators_compare_test();
+	vector_execution_time_test(10000);
 }

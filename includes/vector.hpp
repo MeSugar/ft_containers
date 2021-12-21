@@ -79,13 +79,11 @@ namespace ft
 			{
 				try
 					{
-						const_iterator itBegin(x.begin());
-						const_iterator itEnd(x.end());
-            			difference_type n = ft::distance(itBegin, itEnd);
+						size_t n = x.size();
 						init(n);
 						for (unsigned int i = 0; i < n; i++)
 						{
-							_allocator.construct(_last, itBegin[i]);
+							_allocator.construct(_last, x[i]);
 							_last++;
 						}
 					}
@@ -229,7 +227,17 @@ namespace ft
 				}
 			}
 
-			void	push_back(const value_type& val) { insert(end(), val); }
+			void	push_back(const value_type& val)
+			{
+				if (_last == _end)
+				{
+					int new_capacity = (size() > 0) ? (int)(size() * 2) : 1;
+					this->reserve(new_capacity);
+				}
+				_allocator.construct(_last, val);
+				_last++;
+			}
+
 			void	pop_back() { erase(end() - 1); }
 			iterator	insert(iterator position, const value_type& val)
 			{

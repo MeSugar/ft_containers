@@ -40,7 +40,6 @@ namespace ft
 			}
 
 			bool	operator==(const node &other) { return (value.first == other.value.first); }
-			// bool	operator<(const node &other) { return (value.first < other.value.first); }
 	};
 
 	template <class Key, class T, class Compare = ft::less<Key>, class node_t = node<T>, class Alloc = std::allocator<node_t> >

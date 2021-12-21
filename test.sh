@@ -28,11 +28,11 @@ elif [[ $1 = -h ]]
 then
 	printf "Usage: ./test.sh [options]\n"
 	printf "Options:\n"
-	printf "\t[no option] run tests for all containers\n"
-	printf "\t-v run tests for vector\n"
-	printf "\t-m run tests for map\n"
-	printf "\t-s run tests for stack\n"
-	printf "\t-c run 'make fclean'\n"
+	printf "\t[no option] runs tests for all containers\n"
+	printf "\t-v runs tests for vector\n"
+	printf "\t-m runs tests for map\n"
+	printf "\t-s runs tests for stack\n"
+	printf "\t-c runs 'make fclean'\n"
 else
-	printf "Uknown command. Use -h for command list\n"
+	printf "Uknown option. Use -h to see options list\n"
 fi
