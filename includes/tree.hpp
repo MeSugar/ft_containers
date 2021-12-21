@@ -73,7 +73,7 @@ namespace ft
 				_size = 0; 
 			}
 
-			virtual ~RBTree() {}
+			virtual ~RBTree() { clear_nil_node(); }
 
 			// methods
 			pointer		get_root() const { return _root; }
@@ -184,7 +184,12 @@ namespace ft
 				x._size = tmp_size;
 			}
 
-			void	clear_nil_node() { destroy_n_dealloc (_NIL); }
+			void	clear_nil_node()
+			{
+				if (_NIL != NULL)
+					destroy_n_dealloc (_NIL);
+				_NIL = NULL;
+			}
 
 		protected:
 			allocator_type		_allocator;

@@ -75,11 +75,11 @@ namespace ft
 			~vector_iterator() {}
 			
 			// overloads
-			//  vector_iterator &operator=(const vector_iterator& other)
-			//  {
-			//  	ptr = other.ptr;
-			//  	return (*this);
-			//  }
+			vector_iterator &operator=(vector_iterator const &other)
+			{
+				ptr = other.ptr;
+				return (*this);
+			}
 			
 			reference				operator*(void) const { return (*ptr); }
 			reference				operator[](difference_type n) { return (*(ptr + n)); }
@@ -136,6 +136,8 @@ namespace ft
 				return (*this);
 			}
 
+			operator vector_iterator<const T> () const { return (vector_iterator<const T>(ptr)); }
+
 			pointer					operator->() { return &(operator*()); }
 			bool					operator!=(vector_iterator const &other) const { return (!(ptr == other.ptr)); }
 			bool					operator==(vector_iterator const &other) const { return (ptr == other.ptr); }
@@ -148,6 +150,43 @@ namespace ft
 		protected:
 			pointer ptr;
 	};
+
+	// vector_iterator relational operators
+	template <class T>
+	bool operator!=(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (!(lhs.base() == rhs.base())); }
+
+	template <class T, class U>
+	bool operator!=(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (!(lhs.base() == rhs.base())); }
+
+	template <class T>
+	bool operator==(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (lhs.base() == rhs.base()); }
+
+	template <class T, class U>
+	bool operator==(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (lhs.base() == rhs.base()); }
+
+	template <class T>
+	bool operator>(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (lhs.base() > rhs.base()); }
+
+	template <class T, class U>
+	bool operator>(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (lhs.base() > rhs.base()); }
+
+	template <class T>
+	bool operator<(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (lhs.base() < rhs.base()); }
+
+	template <class T, class U>
+	bool operator<(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (lhs.base() < rhs.base()); }
+
+	template <class T>
+	bool operator>=(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (lhs.base() >= rhs.base()); }
+
+	template <class T, class U>
+	bool operator>=(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (lhs.base() >= rhs.base()); }
+
+	template <class T>
+	bool operator<=(const vector_iterator<T>& lhs, const vector_iterator<T>& rhs) { return (lhs.base() <= rhs.base()); }
+
+	template <class T, class U>
+	bool operator<=(const vector_iterator<T>& lhs, const vector_iterator<U>& rhs) { return (lhs.base() <= rhs.base()); }
 
 	// RBTree_iterator
 	template <class T>
@@ -451,7 +490,7 @@ namespace ft
 			iterator_type revIt;
 	};
 
-	// reverse_iterator overloads
+	// reverse_iterator relational operators
 	template <class Iterator>
 	bool operator!=(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) { return (!(lhs.base() == rhs.base())); }
 

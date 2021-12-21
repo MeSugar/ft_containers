@@ -15,6 +15,7 @@
 
 
 void    vector_test();
+void	map_test();
 
 
 

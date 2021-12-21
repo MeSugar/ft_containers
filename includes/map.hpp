@@ -19,13 +19,9 @@ namespace ft
 
 			class value_compare : ft::binary_function<value_type, value_type, bool>
 			{
-				friend class map;
-
-				protected:
+				public:
 					key_compare	comp;
 					value_compare(key_compare c) : comp(c) {}
-
-				public:
 					bool operator() (const value_type& x, const value_type& y) const
 					{ return comp(x.first, y.first); }
 			};
@@ -67,7 +63,6 @@ namespace ft
 				_allocator = x._allocator;
 				_comp = x._comp;
 				clear();
-				_tree = RBTree<key_type, value_type>();
 				insert(x.begin(), x.end());
 				return *this;
 			}
@@ -139,12 +134,7 @@ namespace ft
 			}
 
 			void					swap(map& x) { _tree.swap(x._tree); }
-
-			void					clear()
-			{ 
-				erase(begin(), end());
-				_tree.clear_nil_node();
-			}
+			void					clear() { erase(begin(), end()); }
 			
 			// observers
 			key_compare		key_comp() const { return (key_compare()); }

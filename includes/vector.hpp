@@ -17,10 +17,10 @@ namespace ft
 			typedef typename allocator_type::const_reference				const_reference;
 			typedef typename allocator_type::pointer						pointer;
 			typedef typename allocator_type::const_pointer					const_pointer;
-			typedef typename ft::vector_iterator<value_type>				iterator;
-			typedef typename ft::vector_iterator<const value_type>			const_iterator;
-			typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-			typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+			typedef ft::vector_iterator<value_type>							iterator;
+			typedef ft::vector_iterator<const value_type>					const_iterator;
+			typedef ft::reverse_iterator<iterator>							reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type; 
 			typedef size_t													size_type;
 		
@@ -93,7 +93,7 @@ namespace ft
 						throw ; }
 			}
 			
-			~vector<T>() { clean(); }
+			~vector() { clean(); }
 
 			vector& operator=(const vector& x)
 			{
@@ -108,8 +108,8 @@ namespace ft
 
 			// iterators
 			iterator				begin() { return iterator(_first); }
-			iterator				end() { return iterator(_last); }
 			const_iterator			begin() const { return const_iterator(_first); }
+			iterator				end() { return iterator(_last); }
 			const_iterator			end() const { return const_iterator(_last); }
 			reverse_iterator		rbegin() { return reverse_iterator(end()); }
 			const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
