@@ -12,7 +12,7 @@ Some extra implementations:
 - std::make_pair
 
 # Usage
-This project includes basic tests for all the member functions, non-member functions and overloads
+This project includes tests for all the member functions, non-member functions and overloads
 ```
 git clone https://github.com/MeSugar/ft_containers.git
 cd ft_containers
