@@ -19,4 +19,4 @@ cd ft_containers
 ./test.sh
 ```
 
-You can test it on your own by using **ft** namespace
+You can test the containers on your own with: **ft::\<container>**
